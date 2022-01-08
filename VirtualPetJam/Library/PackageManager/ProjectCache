@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637770725909876814
-    m_Hash: 1994882144
+      ticks: 637772124916479704
+    m_Hash: 4105298361
   m_LockFileStatus:
     m_FilePath: C:/Users/eduar/Desktop/Virtual-Pet-Jam/VirtualPetJam/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637770725909931046
-    m_Hash: 2080131618
+      ticks: 637772124916489702
+    m_Hash: 3690964955
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_PackageAssets:
