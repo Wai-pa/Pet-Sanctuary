@@ -17,6 +17,7 @@ public class MainCharacterController : MonoBehaviour
     private GameManager gameManager;
     private SoundManager soundManager;
     private CharacterController controller;
+    private PauseMenu pauseMenu;
 
     public void OnMove(InputAction.CallbackContext context) // AD (Keyboard), Left Stick (Gamepad)
     {
@@ -31,6 +32,7 @@ public class MainCharacterController : MonoBehaviour
     public void OnPause(InputAction.CallbackContext context) // ESC (Keyboard), Button Start (Gamepad)
     {
         isPaused = context.performed;
+        pauseMenu.Pause(isPaused);
     }
 
     void Start()
@@ -38,6 +40,7 @@ public class MainCharacterController : MonoBehaviour
         gameManager = GameManager.instance;
         soundManager = SoundManager.instance;
         controller = GetComponent<CharacterController>();
+        pauseMenu = PauseMenu.instance;
     }
 
     void Update()

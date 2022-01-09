@@ -14,32 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SimpleSelectedItems:
     m_Keys:
-    - .collabignore
-    - Assets/Input Manager.meta
-    - Assets/Prefabs.meta
-    - Assets/Scenes.meta
-    - Assets/Scenes/Eduardo Test Scene.unity
-    - Assets/Scenes/Gargoyle Test Scene.unity
-    - Assets/Scenes/Main Scene.unity
-    - Assets/Scenes/Tyangerine Test Scene.unity
-    - Assets/Scripts.meta
-    - Assets/Scripts/Controllers.meta
-    - Assets/Scripts/Gameplay.meta
-    - Assets/Scripts/Gameplay/GameManager.cs.meta
-    - Assets/Scripts/Managers.meta
-    - Assets/Scripts/UI.meta
-    - Assets/Sounds.meta
-    - Assets/Sprites.meta
-    - Packages/manifest.json
-    - Packages/packages-lock.json
-    - ProjectSettings/EditorBuildSettings.asset
-    - ProjectSettings/ProjectSettings.asset
-    - ProjectSettings/ProjectVersion.txt
-    - ProjectSettings/UnityConnectSettings.asset
-    - ProjectSettings/VersionControlSettings.asset
     - 
-    m_Values: 000000000000000000000000000000000000000000000000
-  RevisionSummary: 
+    m_Values: 01
+  RevisionSummary: '+ PauseMenu panel
+
+    + PauseMenu.cs'
   ChangesSearchValue: 
   SelectedHistoryRevision: 
   HistoryPageNumber: 0
