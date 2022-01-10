@@ -51,11 +51,6 @@ public class AnimalController : MonoBehaviour
         this.animalID = animalID;
     }
 
-    public void OnCreateBtn() //UI button to create a new animal
-    {
-        levelManager.CreateAnimal(this);
-    }
-
     public void OnRenameAnimalBtn(string newName) //UI button to rename animal
     {
         levelManager.ChangeAnimalName(animalID, newName);

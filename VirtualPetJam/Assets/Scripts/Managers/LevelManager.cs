@@ -9,6 +9,8 @@ public class LevelManager : MonoBehaviour
     private SoundManager soundManager;
     public static LevelManager instance = null;
 
+    public GameObject firstAnimalPrefab;
+
     public string playerName;
     public int food;
     public int soaps;
@@ -38,14 +40,20 @@ public class LevelManager : MonoBehaviour
         soundManager = SoundManager.instance;
     }
 
-    public void OnSaveLevel()
+    public void OnSaveLevel() //UI button to save game
     {
         SaveSystem.SaveLevel();
     }
 
-    public void OnLoadLevel()
+    public void OnLoadLevel() //UI button to load game
     {
         SaveSystem.LoadLevel();
+    }
+
+    public void OnCreateBtn() //UI button to create a new animal
+    {
+        Instantiate(firstAnimalPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        CreateAnimal(firstAnimalPrefab.GetComponent<AnimalController>());
     }
 
     public void CreateAnimal(AnimalController controller)
