@@ -9,13 +9,19 @@ public class LevelManager : MonoBehaviour
     private SoundManager soundManager;
     public static LevelManager instance = null;
 
-    public GameObject firstAnimalPrefab;
-
+    [Header("Level Stats")]
     public string playerName;
     public int food;
     public int soaps;
     public int toys;
     public int money;
+    public int satisfaction;
+
+    [Header("Resources")]
+    public GameObject firstAnimalPrefab; //temporary
+    public List<Animals> listOfAnimals = new List<Animals>();
+    [SerializeField] private List<GameObject> listOfAnimalsPrefabs = new List<GameObject>();
+    [SerializeField] private GameObject wood;
 
     public struct Animals
     {
@@ -25,8 +31,6 @@ public class LevelManager : MonoBehaviour
         public int cleanessLevel;
         public int pleasureLevel;
     }
-
-    public List<Animals> listOfAnimals = new List<Animals>();
 
     void Awake()
     {
