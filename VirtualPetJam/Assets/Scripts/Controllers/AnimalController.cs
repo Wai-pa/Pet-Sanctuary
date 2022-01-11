@@ -26,27 +26,27 @@ public class AnimalController : MonoBehaviour
         
     }
 
-    public string SetAnimalName()
+    public string GetAnimalName()
     {
         return animalName;
     }
 
-    public int SetFedLevel()
+    public int GetFedLevel()
     {
         return fedLevel;
     }
 
-    public int SetCleanessLevel()
+    public int GetCleanessLevel()
     {
         return cleanessLevel;
     }
 
-    public int SetPleasureLevel()
+    public int GetPleasureLevel()
     {
         return pleasureLevel;
     }
 
-    public void GetAnimalID(int animalID)
+    public void SetAnimalID(int animalID)
     {
         this.animalID = animalID;
     }

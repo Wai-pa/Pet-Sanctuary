@@ -18,10 +18,11 @@ public class LevelManager : MonoBehaviour
     public int satisfaction;
 
     [Header("Resources")]
-    public GameObject firstAnimalPrefab; //temporary
-    public List<Animals> listOfAnimals = new List<Animals>();
+    [SerializeField] private GameObject firstAnimalPrefab; //temporary
+    [SerializeField] private List<Animals> listOfAnimals = new List<Animals>();
     [SerializeField] private List<GameObject> listOfAnimalsPrefabs = new List<GameObject>();
-    [SerializeField] private GameObject wood;
+    [SerializeField] private GameObject woodGameObj;
+    public int wood;
 
     public struct Animals
     {
@@ -65,11 +66,11 @@ public class LevelManager : MonoBehaviour
         Animals animal = new Animals();
 
         animal.animalID = listOfAnimals.Count + 1;
-        controller.GetAnimalID(animal.animalID);
-        animal.animalName = controller.SetAnimalName();
-        animal.fedLevel = controller.SetFedLevel();
-        animal.cleanessLevel = controller.SetCleanessLevel();
-        animal.pleasureLevel = controller.SetPleasureLevel();
+        controller.SetAnimalID(animal.animalID);
+        animal.animalName = controller.GetAnimalName();
+        animal.fedLevel = controller.GetFedLevel();
+        animal.cleanessLevel = controller.GetCleanessLevel();
+        animal.pleasureLevel = controller.GetPleasureLevel();
 
         listOfAnimals.Add(animal);
     }
@@ -86,5 +87,30 @@ public class LevelManager : MonoBehaviour
                 break;
             }
         }
+    }
+
+    public void UpdateFood(bool increase)
+    {
+        food = increase ? food++ : food--;
+    }
+
+    public void UpdateSoaps(bool increase)
+    {
+        soaps = increase ? soaps++ : soaps--;
+    }
+
+    public void UpdateToys(bool increase)
+    {
+        toys = increase ? toys++ : toys--;
+    }
+
+    public void UpdateMoney(bool increase)
+    {
+        money = increase ? money++ : money--;
+    }
+
+    public void UpdateWood(bool increase)
+    {
+        wood = increase ? wood++ : wood--;
     }
 }

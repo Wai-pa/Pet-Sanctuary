@@ -34,10 +34,35 @@ public class UIManager : MonoBehaviour
 
     void Update()
     {
-        
+
     }
 
-    public void IncreaseFood()
+    void FoodTextUpdate()
+    {
+        foodText.text = levelManager.food.ToString();
+    }
+
+    void SoapTextUpdate()
+    {
+        soapText.text = levelManager.soaps.ToString();
+    }
+
+    void ToyTextUpdate()
+    {
+        toyText.text = levelManager.toys.ToString();
+    }
+
+    void MoneyTextUpdate()
+    {
+        moneyText.text = levelManager.money.ToString();
+    }
+
+    void WoodTextUpdate()
+    {
+        woodText.text = levelManager.wood.ToString();
+    }
+
+    void SatisfactionTextUpdate()
     {
 
     }
