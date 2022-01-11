@@ -41,8 +41,5 @@ public class PauseMenu : MonoBehaviour
 #endif
     }
 
-    public bool GameIsPaused()
-    {
-        return isPaused;
-    }
+    public bool GameIsPaused() { return isPaused; }
 }

@@ -9,7 +9,7 @@ public class LevelManager : MonoBehaviour
     private SoundManager soundManager;
     public static LevelManager instance = null;
 
-    [Header("Level Stats")]
+    [Header("Player Stats")]
     public string playerName;
     public int food;
     public int soaps;
@@ -17,10 +17,14 @@ public class LevelManager : MonoBehaviour
     public int money;
     public int satisfaction;
 
+    [Header("Level Stats")]
+    public bool isPlayerInTheWoods = false;
+
     [Header("Resources")]
     [SerializeField] private GameObject firstAnimalPrefab; //temporary
     [SerializeField] private List<Animals> listOfAnimals = new List<Animals>();
     [SerializeField] private List<GameObject> listOfAnimalsPrefabs = new List<GameObject>();
+    [SerializeField] private List<Transform> listOfTransformToSpawnWood = new List<Transform>();
     [SerializeField] private GameObject woodGameObj;
     public int wood;
 
@@ -43,6 +47,11 @@ public class LevelManager : MonoBehaviour
     {
         gameManager = GameManager.instance;
         soundManager = SoundManager.instance;
+    }
+
+    void Update()
+    {
+        if (isPlayerInTheWoods) { WoodSpawner(); }
     }
 
     public void OnSaveLevel() //UI button to save game
@@ -73,6 +82,7 @@ public class LevelManager : MonoBehaviour
         animal.pleasureLevel = controller.GetPleasureLevel();
 
         listOfAnimals.Add(animal);
+        // need to instantiate the right animal
     }
 
     public void ChangeAnimalName(int animalID, string newName)
@@ -89,28 +99,19 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    public void UpdateFood(bool increase)
-    {
-        food = increase ? food++ : food--;
-    }
+    public void UpdateFood(bool increase) { food = increase ? food++ : food--; }
 
-    public void UpdateSoaps(bool increase)
-    {
-        soaps = increase ? soaps++ : soaps--;
-    }
+    public void UpdateSoaps(bool increase) { soaps = increase ? soaps++ : soaps--; }
 
-    public void UpdateToys(bool increase)
-    {
-        toys = increase ? toys++ : toys--;
-    }
+    public void UpdateToys(bool increase) { toys = increase ? toys++ : toys--; }
 
-    public void UpdateMoney(bool increase)
-    {
-        money = increase ? money++ : money--;
-    }
+    public void UpdateMoney(bool increase) { money = increase ? money++ : money--; }
 
-    public void UpdateWood(bool increase)
+    public void UpdateWood(bool increase) { wood = increase ? wood++ : wood--; }
+
+    void WoodSpawner()
     {
-        wood = increase ? wood++ : wood--;
+        int rnd = Random.Range(0, listOfTransformToSpawnWood.Count);
+        Instantiate(woodGameObj, listOfTransformToSpawnWood[rnd].position, Quaternion.identity);
     }
 }

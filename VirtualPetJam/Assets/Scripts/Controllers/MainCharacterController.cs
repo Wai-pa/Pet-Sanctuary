@@ -15,6 +15,7 @@ public class MainCharacterController : MonoBehaviour
 
     [Header("Instances")]
     private GameManager gameManager;
+    private LevelManager levelManager;
     private SoundManager soundManager;
     private CharacterController controller;
     private PauseMenu pauseMenu;
@@ -38,6 +39,7 @@ public class MainCharacterController : MonoBehaviour
     void Start()
     {
         gameManager = GameManager.instance;
+        levelManager = LevelManager.instance;
         soundManager = SoundManager.instance;
         controller = GetComponent<CharacterController>();
         pauseMenu = PauseMenu.instance;
@@ -53,5 +55,22 @@ public class MainCharacterController : MonoBehaviour
         moveVector.x = inputVector.x;
         moveVector.y = inputVector.y;
         controller.Move(moveVector * movementSpeed * Time.deltaTime);
+    }
+
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        Debug.Log("Collision");
+        if (isInteracted)
+        {
+            if (hit.gameObject.CompareTag("Wood"))
+            {
+                levelManager.UpdateWood(true);
+                Destroy(hit.gameObject);
+            }
+            else if (hit.gameObject.CompareTag("Animal"))
+            {
+
+            }
+        }
     }
 }

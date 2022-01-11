@@ -26,30 +26,15 @@ public class AnimalController : MonoBehaviour
         
     }
 
-    public string GetAnimalName()
-    {
-        return animalName;
-    }
+    public string GetAnimalName() { return animalName; }
 
-    public int GetFedLevel()
-    {
-        return fedLevel;
-    }
+    public int GetFedLevel() { return fedLevel; }
 
-    public int GetCleanessLevel()
-    {
-        return cleanessLevel;
-    }
+    public int GetCleanessLevel() { return cleanessLevel; }
 
-    public int GetPleasureLevel()
-    {
-        return pleasureLevel;
-    }
+    public int GetPleasureLevel() { return pleasureLevel; }
 
-    public void SetAnimalID(int animalID)
-    {
-        this.animalID = animalID;
-    }
+    public void SetAnimalID(int animalID) { this.animalID = animalID; }
 
     public void OnRenameAnimalBtn(string newName) //UI button to rename animal
     {
