@@ -18,7 +18,7 @@ public class MainCharacterController : MonoBehaviour
     private LevelManager levelManager;
     private SoundManager soundManager;
     private CharacterController controller;
-    private PauseMenu pauseMenu;
+    private PanelsManager panelsManager;
 
     public void OnMove(InputAction.CallbackContext context) // AD (Keyboard), Left Stick (Gamepad)
     {
@@ -33,7 +33,7 @@ public class MainCharacterController : MonoBehaviour
     public void OnPause(InputAction.CallbackContext context) // ESC (Keyboard), Button Start (Gamepad)
     {
         isPaused = context.performed;
-        pauseMenu.Pause(isPaused);
+        panelsManager.OpenPauseMenuPanel(isPaused);
     }
 
     void Start()
@@ -42,7 +42,7 @@ public class MainCharacterController : MonoBehaviour
         levelManager = LevelManager.instance;
         soundManager = SoundManager.instance;
         controller = GetComponent<CharacterController>();
-        pauseMenu = PauseMenu.instance;
+        panelsManager = PanelsManager.instance;
     }
 
     void Update()
@@ -59,7 +59,6 @@ public class MainCharacterController : MonoBehaviour
 
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        Debug.Log("Collision");
         if (isInteracted)
         {
             if (hit.gameObject.CompareTag("Wood"))
@@ -69,7 +68,7 @@ public class MainCharacterController : MonoBehaviour
             }
             else if (hit.gameObject.CompareTag("Animal"))
             {
-
+                panelsManager.OpenAnimalStatsPanel(hit.gameObject);
             }
         }
     }

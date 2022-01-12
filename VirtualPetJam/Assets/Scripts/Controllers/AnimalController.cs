@@ -9,11 +9,11 @@ public class AnimalController : MonoBehaviour
     private LevelManager levelManager;
 
     [Header("Status")]
-    public int animalID;
-    public string animalName;
-    public int fedLevel;
-    public int cleanessLevel;
-    public int pleasureLevel;
+    [SerializeField] private int animalID;
+    [SerializeField] private string animalName;
+    [SerializeField] private int fedLevel;
+    [SerializeField] private int cleanessLevel;
+    [SerializeField] private int pleasureLevel;
 
     void Start()
     {
@@ -30,14 +30,17 @@ public class AnimalController : MonoBehaviour
 
     public int GetFedLevel() { return fedLevel; }
 
+    public void SetFedLevel(bool increase) { fedLevel = increase ? fedLevel += 1 : fedLevel -= 1; }
+
     public int GetCleanessLevel() { return cleanessLevel; }
+
+    public void SetCleanessLevel(bool increase) { cleanessLevel = increase ? cleanessLevel += 1 : cleanessLevel -= 1; }
 
     public int GetPleasureLevel() { return pleasureLevel; }
 
-    public void SetAnimalID(int animalID) { this.animalID = animalID; }
+    public void SetPleasureLevel(bool increase) { pleasureLevel = increase ? pleasureLevel += 1 : pleasureLevel -= 1; }
 
-    public void OnRenameAnimalBtn(string newName) //UI button to rename animal
-    {
-        levelManager.ChangeAnimalName(animalID, newName);
-    }
+    public int GetAnimalID() { return animalID; }
+
+    public void SetAnimalID(int animalID) { this.animalID = animalID; }
 }

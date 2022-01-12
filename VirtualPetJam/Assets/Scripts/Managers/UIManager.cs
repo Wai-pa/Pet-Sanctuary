@@ -17,7 +17,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Text toyText;
     [SerializeField] private Text moneyText;
     [SerializeField] private Text woodText;
-    [SerializeField] private Text satisfactionText;
+    [SerializeField] private Text rateText;
 
     void Awake()
     {
@@ -34,7 +34,12 @@ public class UIManager : MonoBehaviour
 
     void Update()
     {
+        FoodTextUpdate();
+        SoapTextUpdate();
+        ToyTextUpdate();
+        MoneyTextUpdate();
         WoodTextUpdate();
+        //RateTextUpdate();
     }
 
     void FoodTextUpdate() { foodText.text = levelManager.food.ToString(); }
@@ -47,7 +52,7 @@ public class UIManager : MonoBehaviour
 
     void WoodTextUpdate() { woodText.text = levelManager.wood.ToString(); }
 
-    void SatisfactionTextUpdate()
+    void RateTextUpdate()
     {
 
     }

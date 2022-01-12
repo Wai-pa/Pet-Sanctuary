@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour
 {
@@ -21,7 +22,6 @@ public class LevelManager : MonoBehaviour
     public bool isPlayerInTheWoods = false;
 
     [Header("Resources")]
-    [SerializeField] private GameObject firstAnimalPrefab; //temporary
     [SerializeField] private List<Animals> listOfAnimals = new List<Animals>();
     [SerializeField] private List<GameObject> listOfAnimalsPrefabs = new List<GameObject>();
     [SerializeField] private List<Transform> listOfTransformToSpawnWood = new List<Transform>();
@@ -64,50 +64,28 @@ public class LevelManager : MonoBehaviour
         SaveSystem.LoadLevel();
     }
 
-    public void OnCreateBtn() //UI button to create a new animal
-    {
-        Instantiate(firstAnimalPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        CreateAnimal(firstAnimalPrefab.GetComponent<AnimalController>());
-    }
-
-    public void CreateAnimal(AnimalController controller)
+    public void CreateAnimal(AnimalController controller, string animalName, int animalID)
     {
         Animals animal = new Animals();
 
-        animal.animalID = listOfAnimals.Count + 1;
-        controller.SetAnimalID(animal.animalID);
-        animal.animalName = controller.GetAnimalName();
+        controller.SetAnimalID(animalID);
+        animal.animalName = animalName;
         animal.fedLevel = controller.GetFedLevel();
         animal.cleanessLevel = controller.GetCleanessLevel();
         animal.pleasureLevel = controller.GetPleasureLevel();
 
         listOfAnimals.Add(animal);
-        // need to instantiate the right animal
     }
 
-    public void ChangeAnimalName(int animalID, string newName)
-    {
-        for(int i = 0; i < listOfAnimals.Count; i++)
-        {
-            if(listOfAnimals[i].animalID == animalID)
-            {
-                Animals animal = listOfAnimals[i];
-                animal.animalName = newName;
-                listOfAnimals[i] = animal;
-                break;
-            }
-        }
-    }
+    public void UpdateFood(bool increase) { food = increase ? food += 1 : food -= 1; }
 
-    public void UpdateFood(bool increase) { food = increase ? food++ : food--; }
+    public void UpdateSoaps(bool increase) { soaps = increase ? soaps += 1 : soaps -= 1; }
 
-    public void UpdateSoaps(bool increase) { soaps = increase ? soaps++ : soaps--; }
+    public void UpdateToys(bool increase) { toys = increase ? toys += 1 : toys -= 1; }
 
-    public void UpdateToys(bool increase) { toys = increase ? toys++ : toys--; }
+    public void UpdateMoney(bool increase) { money = increase ? money += 1 : money -= 1; }
 
-    public void UpdateMoney(bool increase) { money = increase ? money++ : money--; }
-
-    public void UpdateWood(bool increase) { wood = increase ? wood++ : wood--; }
+    public void UpdateWood(bool increase) { wood = increase ? wood += 1 : wood -= 1; }
 
     void WoodSpawner()
     {
