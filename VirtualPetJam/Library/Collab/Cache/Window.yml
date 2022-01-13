@@ -15,16 +15,12 @@ MonoBehaviour:
   SimpleSelectedItems:
     m_Keys:
     - Assets/Scenes/Main Scene.unity
-    - Assets/Scripts/Controllers/AnimalController.cs
     - Assets/Scripts/Controllers/MainCharacterController.cs
     - Assets/Scripts/Managers/LevelManager.cs
     - Assets/Scripts/Managers/PanelsManager.cs
-    - Assets/Scripts/Managers/PanelsManager.cs.meta
     - Assets/Scripts/Managers/UIManager.cs
-    - Assets/Scripts/UI/PauseMenu.cs
-    - Assets/Scripts/UI/PauseMenu.cs.meta
     - 
-    m_Values: 00000000000000000000
+    m_Values: 000000000000
   RevisionSummary: 
   ChangesSearchValue: 
   SelectedHistoryRevision: 

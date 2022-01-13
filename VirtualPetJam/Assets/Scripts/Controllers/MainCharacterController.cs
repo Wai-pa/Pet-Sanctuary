@@ -11,7 +11,7 @@ public class MainCharacterController : MonoBehaviour
     private Vector2 inputVector;
     private Vector2 moveVector;
     [SerializeField] private bool isPaused = false;
-    [SerializeField] private bool isInteracted = false;
+    [SerializeField] private bool isInteracted;
 
     [Header("Instances")]
     private GameManager gameManager;

@@ -7,7 +7,6 @@ public class UIManager : MonoBehaviour
 {
     [Header("Instances")]
     private GameManager gameManager;
-    private SoundManager soundManager;
     private LevelManager levelManager;
     public static UIManager instance = null;
 
@@ -28,7 +27,6 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         gameManager = GameManager.instance;
-        soundManager = SoundManager.instance;
         levelManager = LevelManager.instance;
     }
 

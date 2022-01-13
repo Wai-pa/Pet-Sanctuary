@@ -18,15 +18,15 @@ public class LevelManager : MonoBehaviour
     public int money;
     public int satisfaction;
 
-    [Header("Level Stats")]
+    [Header("Wood")]
     public bool isPlayerInTheWoods = false;
+    [SerializeField] private List<Transform> listOfTransformToSpawnWood = new List<Transform>();
+    [SerializeField] private GameObject woodGameObj;
+    public int wood;
 
     [Header("Resources")]
     [SerializeField] private List<Animals> listOfAnimals = new List<Animals>();
     [SerializeField] private List<GameObject> listOfAnimalsPrefabs = new List<GameObject>();
-    [SerializeField] private List<Transform> listOfTransformToSpawnWood = new List<Transform>();
-    [SerializeField] private GameObject woodGameObj;
-    public int wood;
 
     public struct Animals
     {
