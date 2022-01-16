@@ -16,15 +16,18 @@ public class LevelManager : MonoBehaviour
     public int soaps;
     public int toys;
     public int money;
-    public int satisfaction;
+    public int rate;
 
     [Header("Wood")]
     public bool isPlayerInTheWoods = false;
-    [SerializeField] private List<Transform> listOfTransformToSpawnWood = new List<Transform>();
+    [SerializeField] private float timeToSpawnWood = 8f;
+    [SerializeField] private List<Vector3> listOfTransformToSpawnWood = new List<Vector3>();
+    [SerializeField] private List<Vector3> listOfTransformOfSpawnedWoods = new List<Vector3>();
     [SerializeField] private GameObject woodGameObj;
     public int wood;
 
     [Header("Resources")]
+    [SerializeField] private AnimalController animalSelectedController = null;
     [SerializeField] private List<Animals> listOfAnimals = new List<Animals>();
     [SerializeField] private List<GameObject> listOfAnimalsPrefabs = new List<GameObject>();
 
@@ -35,6 +38,7 @@ public class LevelManager : MonoBehaviour
         public int fedLevel;
         public int cleanessLevel;
         public int pleasureLevel;
+        public int overallLevel;
     }
 
     void Awake()
@@ -47,11 +51,13 @@ public class LevelManager : MonoBehaviour
     {
         gameManager = GameManager.instance;
         soundManager = SoundManager.instance;
+        InitializeWoodSpawnPositions();
     }
 
     void Update()
     {
-        if (isPlayerInTheWoods) { WoodSpawner(); }
+        //if (isPlayerInTheWoods) { StartCoroutine(SpawnWoods()); }
+        StartCoroutine(SpawnWoods());
     }
 
     public void OnSaveLevel() //UI button to save game
@@ -64,15 +70,19 @@ public class LevelManager : MonoBehaviour
         SaveSystem.LoadLevel();
     }
 
-    public void CreateAnimal(AnimalController controller, string animalName, int animalID)
+    public void CreateAnimal(string animalName, int animalSelected)
     {
+        GameObject animalObj = listOfAnimalsPrefabs[animalSelected];
+        animalSelectedController = animalObj.GetComponent<AnimalController>();
+        Instantiate(animalObj, new Vector3(0, 0, 0), Quaternion.identity);
+
         Animals animal = new Animals();
 
-        controller.SetAnimalID(animalID);
+        animalSelectedController.SetAnimalID(animalSelected);
         animal.animalName = animalName;
-        animal.fedLevel = controller.GetFedLevel();
-        animal.cleanessLevel = controller.GetCleanessLevel();
-        animal.pleasureLevel = controller.GetPleasureLevel();
+        animal.fedLevel = animalSelectedController.GetFedLevel();
+        animal.cleanessLevel = animalSelectedController.GetCleanessLevel();
+        animal.pleasureLevel = animalSelectedController.GetPleasureLevel();
 
         listOfAnimals.Add(animal);
     }
@@ -87,9 +97,32 @@ public class LevelManager : MonoBehaviour
 
     public void UpdateWood(bool increase) { wood = increase ? wood += 1 : wood -= 1; }
 
-    void WoodSpawner()
+    public void UpdateRate()
     {
-        int rnd = Random.Range(0, listOfTransformToSpawnWood.Count);
-        Instantiate(woodGameObj, listOfTransformToSpawnWood[rnd].position, Quaternion.identity);
+        rate = 0;
+
+        for (int i = 0; i < listOfAnimals.Count; i++)
+        {
+            rate += listOfAnimals[i].overallLevel;
+        }
     }
+
+    void InitializeWoodSpawnPositions()
+    {
+        listOfTransformToSpawnWood.Add(new Vector3(-3,-3,0));
+    }
+
+    IEnumerator SpawnWoods()
+    {
+        if(listOfTransformToSpawnWood.Count > 0)
+        {
+            int rnd = Random.Range(0, listOfTransformToSpawnWood.Count);
+            listOfTransformOfSpawnedWoods.Add(listOfTransformToSpawnWood[rnd]);
+            Instantiate(woodGameObj, listOfTransformToSpawnWood[rnd], Quaternion.identity);
+            listOfTransformToSpawnWood.Remove(listOfTransformToSpawnWood[rnd]);
+        }
+        yield return new WaitForSeconds(timeToSpawnWood);
+    }
+
+    public void RestoreSpawnedWoodTransform(Vector3 position) { listOfTransformToSpawnWood.Add(position); }
 }

@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Animal
   - Wood
+  - AnimalCreator
+  - ResourceTrader
   layers:
   - Default
   - TransparentFX

@@ -14,6 +14,7 @@ public class AnimalController : MonoBehaviour
     [SerializeField] private int fedLevel;
     [SerializeField] private int cleanessLevel;
     [SerializeField] private int pleasureLevel;
+    [SerializeField] private int overallLevel;
 
     void Start()
     {
@@ -43,4 +44,6 @@ public class AnimalController : MonoBehaviour
     public int GetAnimalID() { return animalID; }
 
     public void SetAnimalID(int animalID) { this.animalID = animalID; }
+
+    public int GetOverallLevel() { return overallLevel; }
 }

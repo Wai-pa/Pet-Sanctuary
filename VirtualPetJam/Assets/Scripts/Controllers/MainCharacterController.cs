@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 public class MainCharacterController : MonoBehaviour
 {
     [Header("Input")]
+    [SerializeField] private Rigidbody2D rb;
     [SerializeField] private float movementSpeed = 8f;
     private Vector2 inputVector;
     private Vector2 moveVector;
@@ -17,8 +18,7 @@ public class MainCharacterController : MonoBehaviour
     private GameManager gameManager;
     private LevelManager levelManager;
     private SoundManager soundManager;
-    private CharacterController controller;
-    private PanelsManager panelsManager;
+    private UIManager uiManager;
 
     public void OnMove(InputAction.CallbackContext context) // AD (Keyboard), Left Stick (Gamepad)
     {
@@ -33,7 +33,7 @@ public class MainCharacterController : MonoBehaviour
     public void OnPause(InputAction.CallbackContext context) // ESC (Keyboard), Button Start (Gamepad)
     {
         isPaused = context.performed;
-        panelsManager.OpenPauseMenuPanel(isPaused);
+        uiManager.OpenPauseMenuPanel(isPaused);
     }
 
     void Start()
@@ -41,11 +41,11 @@ public class MainCharacterController : MonoBehaviour
         gameManager = GameManager.instance;
         levelManager = LevelManager.instance;
         soundManager = SoundManager.instance;
-        controller = GetComponent<CharacterController>();
-        panelsManager = PanelsManager.instance;
+        rb = GetComponent<Rigidbody2D>();
+        uiManager = UIManager.instance;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         Movement();
     }
@@ -54,21 +54,26 @@ public class MainCharacterController : MonoBehaviour
     {
         moveVector.x = inputVector.x;
         moveVector.y = inputVector.y;
-        controller.Move(moveVector * movementSpeed * Time.deltaTime);
+        rb.MovePosition(rb.position + moveVector * movementSpeed * Time.fixedDeltaTime);
     }
 
-    void OnControllerColliderHit(ControllerColliderHit hit)
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Wood")
+        {
+            levelManager.RestoreSpawnedWoodTransform(collision.gameObject.transform.position);
+            levelManager.UpdateWood(true);
+            Destroy(collision.gameObject);
+        }
+    }
+
+    void OnCollisionStay2D(Collision2D collision)
     {
         if (isInteracted)
         {
-            if (hit.gameObject.CompareTag("Wood"))
+            if (collision.gameObject.tag == "Animal")
             {
-                levelManager.UpdateWood(true);
-                Destroy(hit.gameObject);
-            }
-            else if (hit.gameObject.CompareTag("Animal"))
-            {
-                panelsManager.OpenAnimalStatsPanel(hit.gameObject);
+                uiManager.OpenAnimalStatsPanel(collision.gameObject);
             }
         }
     }
