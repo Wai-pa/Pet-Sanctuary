@@ -17,10 +17,11 @@ public class LevelManager : MonoBehaviour
     public int toys;
     public int money;
     public int rate;
+    public bool isPlayerInTheFrontyard = false;
+    public bool isPlayerInTheBackyard = false;
 
     [Header("Wood")]
-    public bool isPlayerInTheWoods = false;
-    [SerializeField] private float timeToSpawnWood = 8f;
+    [SerializeField] private float timeToSpawnWood = 5f;
     [SerializeField] private List<Vector3> listOfTransformToSpawnWood = new List<Vector3>();
     [SerializeField] private List<Vector3> listOfTransformOfSpawnedWoods = new List<Vector3>();
     [SerializeField] private GameObject woodGameObj;
@@ -51,13 +52,14 @@ public class LevelManager : MonoBehaviour
     {
         gameManager = GameManager.instance;
         soundManager = SoundManager.instance;
-        InitializeWoodSpawnPositions();
+        IsPlayerInTheFrontyard(false);
+        IsPlayerInTheBackyard(false);
+        StartCoroutine(SpawnWoods());
     }
 
     void Update()
     {
-        //if (isPlayerInTheWoods) { StartCoroutine(SpawnWoods()); }
-        StartCoroutine(SpawnWoods());
+
     }
 
     public void OnSaveLevel() //UI button to save game
@@ -109,20 +111,45 @@ public class LevelManager : MonoBehaviour
 
     void InitializeWoodSpawnPositions()
     {
-        listOfTransformToSpawnWood.Add(new Vector3(-3,-3,0));
+        listOfTransformToSpawnWood.Add(new Vector3(-3, -3, 0));
+        listOfTransformToSpawnWood.Add(new Vector3(-7, -1, 0));
+        listOfTransformToSpawnWood.Add(new Vector3(-7, -3, 0));
+        listOfTransformToSpawnWood.Add(new Vector3(-7, -6, 0));
+        listOfTransformToSpawnWood.Add(new Vector3(-4, -6, 0));
+        listOfTransformToSpawnWood.Add(new Vector3(1, -4, 0));
+        listOfTransformToSpawnWood.Add(new Vector3(12, -2, 0));
+        listOfTransformToSpawnWood.Add(new Vector3(11, -5, 0));
+        listOfTransformToSpawnWood.Add(new Vector3(6, -6, 0));
     }
 
     IEnumerator SpawnWoods()
     {
-        if(listOfTransformToSpawnWood.Count > 0)
+        InitializeWoodSpawnPositions();
+
+        while (true)
         {
-            int rnd = Random.Range(0, listOfTransformToSpawnWood.Count);
-            listOfTransformOfSpawnedWoods.Add(listOfTransformToSpawnWood[rnd]);
-            Instantiate(woodGameObj, listOfTransformToSpawnWood[rnd], Quaternion.identity);
-            listOfTransformToSpawnWood.Remove(listOfTransformToSpawnWood[rnd]);
+            if (isPlayerInTheFrontyard)
+            {
+                yield return new WaitForSeconds(timeToSpawnWood);
+
+                if (listOfTransformToSpawnWood.Count > 0)
+                {
+                    int rnd = Random.Range(0, listOfTransformToSpawnWood.Count);
+                    listOfTransformOfSpawnedWoods.Add(listOfTransformToSpawnWood[rnd]);
+                    Instantiate(woodGameObj, listOfTransformToSpawnWood[rnd], Quaternion.identity);
+                    listOfTransformToSpawnWood.Remove(listOfTransformToSpawnWood[rnd]);
+                }
+            }
         }
-        yield return new WaitForSeconds(timeToSpawnWood);
     }
 
-    public void RestoreSpawnedWoodTransform(Vector3 position) { listOfTransformToSpawnWood.Add(position); }
+    public void RestoreSpawnedWoodPosition(Vector3 position)
+    {
+        listOfTransformToSpawnWood.Add(position);
+        listOfTransformOfSpawnedWoods.Remove(position);
+    }
+
+    public void IsPlayerInTheFrontyard(bool yes) { isPlayerInTheFrontyard = yes ? true : false; }
+
+    public void IsPlayerInTheBackyard(bool yes) { isPlayerInTheBackyard = yes ? true : false; }
 }

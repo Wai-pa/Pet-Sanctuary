@@ -14,14 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SimpleSelectedItems:
     m_Keys:
-    - Assets/Prefabs/Wood.meta
-    - Assets/Prefabs/Wood/Wood.prefab
-    - Assets/Prefabs/Wood/Wood.prefab.meta
-    - Assets/Scenes/Main Scene.unity
-    - Assets/Scripts/Controllers/MainCharacterController.cs
-    - Assets/Scripts/Managers/LevelManager.cs
     - 
-    m_Values: 00000000000000
+    m_Values: 01
   RevisionSummary: 
   ChangesSearchValue: 
   SelectedHistoryRevision: 

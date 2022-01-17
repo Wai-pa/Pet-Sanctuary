@@ -50,6 +50,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject pauseMenuPanel;
     private bool isPaused = false;
 
+    [Header("Fast Travel Black Panel")]
+    [SerializeField] private GameObject fastTravelBlackPanel;
+
     [Header("Resources")]
     [SerializeField] private List<Sprite> listOfAnimalsImages = new List<Sprite>();
     [SerializeField] private AnimalController animalSelectedController = null;
@@ -308,6 +311,17 @@ public class UIManager : MonoBehaviour
     public bool GameIsPaused() { return isPaused; }
 
     // ================= [END] Pause Menu Panel =======================
+
+
+    // ================= [BEGIN] Fast Travel Black Panel =======================
+
+    public void FastTravelBlackPanel(bool activate)
+    {
+        if (activate) { fastTravelBlackPanel.SetActive(true); }
+        else { fastTravelBlackPanel.SetActive(false); }
+    }
+
+    // ================= [END] Fast Travel Black Panel =======================
 
 
     // ================= [BEGIN] Resources =======================

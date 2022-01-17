@@ -20,6 +20,12 @@ public class MainCharacterController : MonoBehaviour
     private SoundManager soundManager;
     private UIManager uiManager;
 
+    [Header("Fast Travel")]
+    private Vector3 spawnOutsideFrontDoor;
+    private Vector3 spawnOutsideBackDoor;
+    private Vector3 spawnBuildingFrontDoor;
+    private Vector3 spawnBuildingBackDoor;
+
     public void OnMove(InputAction.CallbackContext context) // AD (Keyboard), Left Stick (Gamepad)
     {
         inputVector = context.ReadValue<Vector2>();
@@ -38,16 +44,26 @@ public class MainCharacterController : MonoBehaviour
 
     void Start()
     {
-        gameManager = GameManager.instance;
-        levelManager = LevelManager.instance;
-        soundManager = SoundManager.instance;
-        rb = GetComponent<Rigidbody2D>();
-        uiManager = UIManager.instance;
+        Initialize();
     }
 
     void FixedUpdate()
     {
         Movement();
+    }
+
+    void Initialize()
+    {
+        gameManager = GameManager.instance;
+        levelManager = LevelManager.instance;
+        soundManager = SoundManager.instance;
+        rb = GetComponent<Rigidbody2D>();
+        uiManager = UIManager.instance;
+
+        spawnOutsideFrontDoor = new Vector3(4, -1, 0);
+        spawnOutsideBackDoor = new Vector3(4, 5, 0);
+        spawnBuildingFrontDoor = new Vector3(25.5f, 1, 0);
+        spawnBuildingBackDoor = new Vector3(25.5f, 4.4f, 0);
     }
 
     void Movement()
@@ -61,7 +77,7 @@ public class MainCharacterController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Wood")
         {
-            levelManager.RestoreSpawnedWoodTransform(collision.gameObject.transform.position);
+            levelManager.RestoreSpawnedWoodPosition(collision.gameObject.transform.position);
             levelManager.UpdateWood(true);
             Destroy(collision.gameObject);
         }
@@ -71,10 +87,24 @@ public class MainCharacterController : MonoBehaviour
     {
         if (isInteracted)
         {
-            if (collision.gameObject.tag == "Animal")
-            {
-                uiManager.OpenAnimalStatsPanel(collision.gameObject);
-            }
+            if (collision.gameObject.tag == "Animal") { uiManager.OpenAnimalStatsPanel(collision.gameObject); }
+            else if(collision.gameObject.name == "OutsideFrontDoor") { StartCoroutine(FastTravel(spawnBuildingFrontDoor)); }
+            else if (collision.gameObject.name == "OutsideBackDoor") { StartCoroutine(FastTravel(spawnBuildingBackDoor)); }
+            else if (collision.gameObject.name == "BuildingFrontDoor") { StartCoroutine(FastTravel(spawnOutsideFrontDoor)); }
+            else if (collision.gameObject.name == "BuildingBackDoor") { StartCoroutine(FastTravel(spawnOutsideBackDoor)); }
         }
+    }
+
+    IEnumerator FastTravel(Vector3 target)
+    {
+        if(target == spawnOutsideFrontDoor) { levelManager.IsPlayerInTheFrontyard(false); }
+        else if(target == spawnOutsideBackDoor) { levelManager.IsPlayerInTheBackyard(false); }
+        else if (target == spawnBuildingFrontDoor) { levelManager.IsPlayerInTheFrontyard(true); }
+        else if (target == spawnBuildingBackDoor) { levelManager.IsPlayerInTheBackyard(true); }
+
+        uiManager.FastTravelBlackPanel(true);
+        yield return new WaitForSeconds(2f);
+        transform.position = target;
+        uiManager.FastTravelBlackPanel(false);
     }
 }
