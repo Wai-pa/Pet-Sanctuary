@@ -88,22 +88,36 @@ public class MainCharacterController : MonoBehaviour
         if (isInteracted)
         {
             if (collision.gameObject.tag == "Animal") { uiManager.OpenAnimalStatsPanel(collision.gameObject); }
-            else if(collision.gameObject.name == "OutsideFrontDoor") { StartCoroutine(FastTravel(spawnBuildingFrontDoor)); }
-            else if (collision.gameObject.name == "OutsideBackDoor") { StartCoroutine(FastTravel(spawnBuildingBackDoor)); }
-            else if (collision.gameObject.name == "BuildingFrontDoor") { StartCoroutine(FastTravel(spawnOutsideFrontDoor)); }
-            else if (collision.gameObject.name == "BuildingBackDoor") { StartCoroutine(FastTravel(spawnOutsideBackDoor)); }
+            else if(collision.gameObject.name == "OutsideFrontDoor") 
+            {
+                levelManager.IsPlayerInTheFrontyard(false);
+                StartCoroutine(FastTravel(spawnBuildingFrontDoor)); 
+            }
+            else if (collision.gameObject.name == "OutsideBackDoor") 
+            {
+                levelManager.IsPlayerInTheBackyard(false);
+                StartCoroutine(FastTravel(spawnBuildingBackDoor)); 
+            }
+            else if (collision.gameObject.name == "BuildingFrontDoor") 
+            {
+                levelManager.IsPlayerInTheFrontyard(true);
+                StartCoroutine(FastTravel(spawnOutsideFrontDoor)); 
+            }
+            else if (collision.gameObject.name == "BuildingBackDoor") 
+            {
+                levelManager.IsPlayerInTheBackyard(true);
+                StartCoroutine(FastTravel(spawnOutsideBackDoor)); 
+            }
+            else if (collision.gameObject.name == "AnimalCreator") { uiManager.OpenCreateAnimalPanel(); }
+
+            else if (collision.gameObject.name == "ResourceTrader") { uiManager.OpenResourceTraderPanel(); }
         }
     }
 
     IEnumerator FastTravel(Vector3 target)
     {
-        if(target == spawnOutsideFrontDoor) { levelManager.IsPlayerInTheFrontyard(false); }
-        else if(target == spawnOutsideBackDoor) { levelManager.IsPlayerInTheBackyard(false); }
-        else if (target == spawnBuildingFrontDoor) { levelManager.IsPlayerInTheFrontyard(true); }
-        else if (target == spawnBuildingBackDoor) { levelManager.IsPlayerInTheBackyard(true); }
-
         uiManager.FastTravelBlackPanel(true);
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
         transform.position = target;
         uiManager.FastTravelBlackPanel(false);
     }

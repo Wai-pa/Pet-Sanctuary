@@ -25,14 +25,14 @@ public class UIManager : MonoBehaviour
 
     [Header("Create Animal Panel")]
     [SerializeField] private GameObject createAnimalPanel;
-    [SerializeField] private Sprite animalCreateImg;
+    [SerializeField] private Image animalCreateImg;
     [SerializeField] private Text animalDescriptionTxt;
     [SerializeField] private string nameInput;
     [SerializeField] private int animalSelected;
 
     [Header("Animal Stats Panel")]
     [SerializeField] private GameObject animalStatsPanel;
-    [SerializeField] private Sprite animalStatsImg;
+    [SerializeField] private Image animalStatsImg;
     [SerializeField] private Text animalNameTxt;
     [SerializeField] private Text foodAnimalStatsTxt;
     [SerializeField] private Text soapAnimalStatsTxt;
@@ -152,7 +152,7 @@ public class UIManager : MonoBehaviour
     public void OnAnimalSelectionDropdown(int input)
     {
         animalSelected = input;
-        animalCreateImg = listOfAnimalsImages[input];
+        animalCreateImg.sprite = listOfAnimalsImages[input];
 
         switch (input)
         {
@@ -185,7 +185,7 @@ public class UIManager : MonoBehaviour
             Time.timeScale = 0f;
 
             animalSelectedController = gameObj.GetComponent<AnimalController>();
-            animalStatsImg = listOfAnimalsImages[animalSelectedController.GetAnimalID()];
+            animalStatsImg.sprite = listOfAnimalsImages[animalSelectedController.GetAnimalID()];
             animalNameTxt.text = animalSelectedController.GetAnimalName();
             foodAnimalStatsTxt.text = levelManager.food.ToString();
             soapAnimalStatsTxt.text = levelManager.soaps.ToString();
@@ -225,6 +225,11 @@ public class UIManager : MonoBehaviour
     public void OpenResourceTraderPanel()
     {
         TogglePanels(resourceTraderPanel, gameplayUIPanel);
+        woodResourceTraderText.text = levelManager.wood.ToString();
+        moneyResourceTraderText.text = levelManager.money.ToString();
+        foodResourceTraderText.text = levelManager.food.ToString();
+        soapResourceTraderText.text = levelManager.soaps.ToString();
+        toyResourceTraderText.text = levelManager.toys.ToString();
         Time.timeScale = 0f;
     }
 

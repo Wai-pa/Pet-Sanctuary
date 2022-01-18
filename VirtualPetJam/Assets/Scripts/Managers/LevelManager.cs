@@ -1,14 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using Cinemachine;
 
 public class LevelManager : MonoBehaviour
 {
     [Header("Instances")]
+    public static LevelManager instance = null;
+    [SerializeField] private CinemachineConfiner confiner;
     private GameManager gameManager;
     private SoundManager soundManager;
-    public static LevelManager instance = null;
 
     [Header("Player Stats")]
     public string playerName;
@@ -22,6 +23,7 @@ public class LevelManager : MonoBehaviour
 
     [Header("Wood")]
     [SerializeField] private float timeToSpawnWood = 5f;
+    private float spawnWoodTime;
     [SerializeField] private List<Vector3> listOfTransformToSpawnWood = new List<Vector3>();
     [SerializeField] private List<Vector3> listOfTransformOfSpawnedWoods = new List<Vector3>();
     [SerializeField] private GameObject woodGameObj;
@@ -31,6 +33,8 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private AnimalController animalSelectedController = null;
     [SerializeField] private List<Animals> listOfAnimals = new List<Animals>();
     [SerializeField] private List<GameObject> listOfAnimalsPrefabs = new List<GameObject>();
+    [SerializeField] private PolygonCollider2D outsideCollider;
+    [SerializeField] private PolygonCollider2D buildingCollider;
 
     public struct Animals
     {
@@ -52,14 +56,28 @@ public class LevelManager : MonoBehaviour
     {
         gameManager = GameManager.instance;
         soundManager = SoundManager.instance;
+        InitializeWoodSpawnPositions();
         IsPlayerInTheFrontyard(false);
         IsPlayerInTheBackyard(false);
-        StartCoroutine(SpawnWoods());
     }
 
     void Update()
     {
+        if (isPlayerInTheFrontyard)
+        {
+            if (spawnWoodTime <= 0)
+            {
+                SpawnWood();
+                spawnWoodTime = timeToSpawnWood;
+            }
+            else
+            {
+                spawnWoodTime -= Time.deltaTime;
+            }
+        }
 
+        if(!isPlayerInTheBackyard && !isPlayerInTheFrontyard) { confiner.m_BoundingShape2D = buildingCollider; }
+        else { confiner.m_BoundingShape2D = outsideCollider; }
     }
 
     public void OnSaveLevel() //UI button to save game
@@ -76,7 +94,7 @@ public class LevelManager : MonoBehaviour
     {
         GameObject animalObj = listOfAnimalsPrefabs[animalSelected];
         animalSelectedController = animalObj.GetComponent<AnimalController>();
-        Instantiate(animalObj, new Vector3(0, 0, 0), Quaternion.identity);
+        Instantiate(animalObj, new Vector3(0, 6, 0), Quaternion.identity);
 
         Animals animal = new Animals();
 
@@ -122,25 +140,12 @@ public class LevelManager : MonoBehaviour
         listOfTransformToSpawnWood.Add(new Vector3(6, -6, 0));
     }
 
-    IEnumerator SpawnWoods()
+    private void SpawnWood()
     {
-        InitializeWoodSpawnPositions();
-
-        while (true)
-        {
-            if (isPlayerInTheFrontyard)
-            {
-                yield return new WaitForSeconds(timeToSpawnWood);
-
-                if (listOfTransformToSpawnWood.Count > 0)
-                {
-                    int rnd = Random.Range(0, listOfTransformToSpawnWood.Count);
-                    listOfTransformOfSpawnedWoods.Add(listOfTransformToSpawnWood[rnd]);
-                    Instantiate(woodGameObj, listOfTransformToSpawnWood[rnd], Quaternion.identity);
-                    listOfTransformToSpawnWood.Remove(listOfTransformToSpawnWood[rnd]);
-                }
-            }
-        }
+        int rnd = Random.Range(0, listOfTransformToSpawnWood.Count);
+        listOfTransformOfSpawnedWoods.Add(listOfTransformToSpawnWood[rnd]);
+        Instantiate(woodGameObj, listOfTransformToSpawnWood[rnd], Quaternion.identity);
+        listOfTransformToSpawnWood.Remove(listOfTransformToSpawnWood[rnd]);
     }
 
     public void RestoreSpawnedWoodPosition(Vector3 position)
@@ -149,7 +154,7 @@ public class LevelManager : MonoBehaviour
         listOfTransformOfSpawnedWoods.Remove(position);
     }
 
-    public void IsPlayerInTheFrontyard(bool yes) { isPlayerInTheFrontyard = yes ? true : false; }
+    public void IsPlayerInTheFrontyard(bool yes) { isPlayerInTheFrontyard = yes; }
 
-    public void IsPlayerInTheBackyard(bool yes) { isPlayerInTheBackyard = yes ? true : false; }
+    public void IsPlayerInTheBackyard(bool yes) { isPlayerInTheBackyard = yes; }
 }
