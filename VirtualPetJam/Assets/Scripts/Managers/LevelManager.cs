@@ -36,6 +36,9 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private PolygonCollider2D outsideCollider;
     [SerializeField] private PolygonCollider2D buildingCollider;
 
+    [SerializeField] private List<Vector3> listOfAnimalSpawnPoints = new List<Vector3>();
+    [SerializeField] private int animalSpawnPointInt;
+
     public struct Animals
     {
         public int animalID;
@@ -44,6 +47,8 @@ public class LevelManager : MonoBehaviour
         public int cleanessLevel;
         public int pleasureLevel;
         public int overallLevel;
+        public int spawnPosX;
+        public int spawnPosY;
     }
 
     void Awake()
@@ -56,6 +61,7 @@ public class LevelManager : MonoBehaviour
     {
         gameManager = GameManager.instance;
         soundManager = SoundManager.instance;
+        InitializeAnimalSpawnPoints();
         InitializeWoodSpawnPositions();
         IsPlayerInTheFrontyard(false);
         IsPlayerInTheBackyard(false);
@@ -92,19 +98,26 @@ public class LevelManager : MonoBehaviour
 
     public void CreateAnimal(string animalName, int animalSelected)
     {
-        GameObject animalObj = listOfAnimalsPrefabs[animalSelected];
+        animalSpawnPointInt = Random.Range(0, listOfAnimalSpawnPoints.Count);
+        Instantiate(listOfAnimalsPrefabs[animalSelected], listOfAnimalSpawnPoints[animalSpawnPointInt], Quaternion.identity);
+        GameObject animalObj = GameObject.Find("Animal" + (animalSelected + 1) + "(Clone)");
+        animalObj.name = animalName;
+        
         animalSelectedController = animalObj.GetComponent<AnimalController>();
-        Instantiate(animalObj, new Vector3(0, 6, 0), Quaternion.identity);
-
+        animalSelectedController.SetAnimalID(animalSelected + 1);
+        animalSelectedController.SetAnimalName(animalName);
+        
         Animals animal = new Animals();
 
-        animalSelectedController.SetAnimalID(animalSelected);
+        animal.animalID = animalSelectedController.GetAnimalID();
         animal.animalName = animalName;
         animal.fedLevel = animalSelectedController.GetFedLevel();
         animal.cleanessLevel = animalSelectedController.GetCleanessLevel();
         animal.pleasureLevel = animalSelectedController.GetPleasureLevel();
+        animal.overallLevel = animalSelectedController.GetOverallLevel();
 
         listOfAnimals.Add(animal);
+        listOfAnimalSpawnPoints.Remove(listOfAnimalSpawnPoints[animalSpawnPointInt]);
     }
 
     public void UpdateFood(bool increase) { food = increase ? food += 1 : food -= 1; }
@@ -157,4 +170,18 @@ public class LevelManager : MonoBehaviour
     public void IsPlayerInTheFrontyard(bool yes) { isPlayerInTheFrontyard = yes; }
 
     public void IsPlayerInTheBackyard(bool yes) { isPlayerInTheBackyard = yes; }
+
+    void InitializeAnimalSpawnPoints()
+    {
+        listOfAnimalSpawnPoints.Add(new Vector3(-7.5f, 1.7f, 0));
+        listOfAnimalSpawnPoints.Add(new Vector3(-7.5f, 8.7f, 0));
+        listOfAnimalSpawnPoints.Add(new Vector3(-7.5f, 12.3f, 0));
+        listOfAnimalSpawnPoints.Add(new Vector3(-1f, 8.7f, 0));
+        listOfAnimalSpawnPoints.Add(new Vector3(6f, 5.5f, 0));
+        listOfAnimalSpawnPoints.Add(new Vector3(12f, 12.8f, 0));
+    }
+
+    public int GetAnimalSpawnPointInt() { return animalSpawnPointInt; }
+
+    public int GetSizeOfAnimalSpawnPointList() { return listOfAnimalSpawnPoints.Count; }
 }

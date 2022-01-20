@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 702776109664720865}
   - component: {fileID: 702776109664720864}
   - component: {fileID: 702776109664720867}
+  - component: {fileID: 8510689959853804765}
   - component: {fileID: 702776109664720870}
   m_Layer: 0
   m_Name: Animal2
@@ -103,6 +104,7 @@ MonoBehaviour:
   cleanessLevel: 0
   pleasureLevel: 0
   overallLevel: 0
+  spawnPos: {x: 0, y: 0, z: 0}
 --- !u!114 &702776109664720867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,6 +117,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 485cf44f9419a8f409af178fb829362c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 0}
+  movementSpeed: 3
+  waitTime: 2
+  listOfAnimalPatrolPoints: []
+  distanceToStop: 0.5
+  point01: {fileID: 5885645518125301036, guid: a517ef364a843b24ab7014f67ecaeaae, type: 3}
+  point02: {fileID: 5814376465166909778, guid: 4be8e3c6e8308c244bf728a918baad25, type: 3}
+  point03: {fileID: 8477470416853877976, guid: 183bae12e83d7064d96594c95b6e02d9, type: 3}
+  point11: {fileID: 2501417182585678892, guid: e096b4ebdcc4810409d1db174e1feeec, type: 3}
+  point12: {fileID: 360013491957747761, guid: 341b502d5c3b9ed49873552a7b912a40, type: 3}
+  point13: {fileID: 3708539724834267971, guid: 48d167630771a584fb90f25ce9a5a4c0, type: 3}
+  point14: {fileID: 3906627779007194146, guid: b617af5e89b5b0d42b8671ded1ee0956, type: 3}
+  point21: {fileID: 7327405126771301796, guid: fb59e19f71009074d81448b8ea41db55, type: 3}
+  point22: {fileID: 7009450467711644107, guid: 1c875a4d077141e46a4db32ababb2d91, type: 3}
+  point31: {fileID: 7538005081347473985, guid: 42a03667f5d587d4e881cbf25a319e2d, type: 3}
+  point32: {fileID: 6000812705219194730, guid: 691440ec62ae7e548ae4a028284879f5, type: 3}
+  point33: {fileID: 747151544507007092, guid: b19eae383bd8c8c458ed675824bb2a33, type: 3}
+  point41: {fileID: 2897702753490597525, guid: e0a433d793ce993408474dc57eccbab1, type: 3}
+  point42: {fileID: 3417722459363328582, guid: fd146b7506ec9f34c8a9838a99c7df16, type: 3}
+  point43: {fileID: 7871688570540122974, guid: 6ee35f0088a533240832f24e68d7a7f2, type: 3}
+  point44: {fileID: 698533026361235785, guid: 4f69ec91fbadae542a9f1a24c53d8073, type: 3}
+  point51: {fileID: 2731140498091353795, guid: 439d68a01a213f6418c06de54d3005ac, type: 3}
+  point52: {fileID: 1651327617090867406, guid: fda21ca9ee9d9884db2b961023791494, type: 3}
+  point53: {fileID: 5809091062159383434, guid: 7dc2b84ffd7230a4ba5023f999a77f83, type: 3}
+--- !u!50 &8510689959853804765
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 702776109664720861}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!61 &702776109664720870
 BoxCollider2D:
   m_ObjectHideFlags: 0

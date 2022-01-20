@@ -14,9 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SimpleSelectedItems:
     m_Keys:
+    - Assets/Prefabs/Animals/Animal1.prefab
+    - Assets/Prefabs/Animals/Animal2.prefab
+    - Assets/Prefabs/Animals/Animal3.prefab
     - Assets/Scenes/Main Scene.unity
+    - Assets/Scripts/Gameplay/AnimalPatrollingBehaviour.cs
+    - Assets/Scripts/Managers/LevelManager.cs
     - 
-    m_Values: 0101
+    m_Values: 00000000000000
   RevisionSummary: 
   ChangesSearchValue: 
   SelectedHistoryRevision: 

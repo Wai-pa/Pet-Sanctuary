@@ -29,6 +29,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Text animalDescriptionTxt;
     [SerializeField] private string nameInput;
     [SerializeField] private int animalSelected;
+    [SerializeField] private Dropdown animalDropdown;
+    [SerializeField] private InputField animalInputField;
 
     [Header("Animal Stats Panel")]
     [SerializeField] private GameObject animalStatsPanel;
@@ -144,31 +146,32 @@ public class UIManager : MonoBehaviour
 
     public void OnCreateBtn()
     {
+        if(nameInput == "") { return; }
+
+        if(levelManager.GetSizeOfAnimalSpawnPointList() < 1) { return; }
+
+        levelManager.CreateAnimal(nameInput, animalSelected);
         TogglePanels(gameplayUIPanel, createAnimalPanel);
         Time.timeScale = 1f;
-        levelManager.CreateAnimal(nameInput, animalSelected);
     }
 
-    public void OnAnimalSelectionDropdown(int input)
+    public void OnAnimalSelectionDropdown()
     {
-        animalSelected = input;
-        animalCreateImg.sprite = listOfAnimalsImages[input];
+        animalSelected = animalDropdown.value;
+        animalCreateImg.sprite = listOfAnimalsImages[animalDropdown.value];
 
-        switch (input)
-        {
-            case 0:
-                animalDescriptionTxt.text = "This animal eats more than usual!";
-                break;
-            case 1:
-                animalDescriptionTxt.text = "This animal gets more dirty than usual!";
-                break;
-            case 2:
-                animalDescriptionTxt.text = "This animal likes to play more than usual!";
-                break;
-        }
+        if (animalDropdown.value == 0) { animalDescriptionTxt.text = "This animal eats more than usual!"; }
+        if (animalDropdown.value == 1) { animalDescriptionTxt.text = "This animal gets more dirty than usual!"; }
+        if (animalDropdown.value == 2) { animalDescriptionTxt.text = "This animal likes to play more than usual!"; }
     }
 
-    public void OnAnimalNameInputInfield(string name) { nameInput = name; }
+    public void OnAnimalNameInputField() { nameInput = animalInputField.text; }
+
+    public void OnCreateAnimalBack()
+    {
+        TogglePanels(gameplayUIPanel, createAnimalPanel);
+        Time.timeScale = 1f;
+    }
 
     // ================= [END] Create Animal Panel =====================
 

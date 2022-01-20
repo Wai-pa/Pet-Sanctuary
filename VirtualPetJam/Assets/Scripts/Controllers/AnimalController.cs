@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class AnimalController : MonoBehaviour
 {
-    [Header("Instances")]
-    private GameManager gameManager;
-    private LevelManager levelManager;
-
     [Header("Status")]
     [SerializeField] private int animalID;
     [SerializeField] private string animalName;
@@ -15,19 +11,11 @@ public class AnimalController : MonoBehaviour
     [SerializeField] private int cleanessLevel;
     [SerializeField] private int pleasureLevel;
     [SerializeField] private int overallLevel;
-
-    void Start()
-    {
-        gameManager = GameManager.instance;
-        levelManager = LevelManager.instance;
-    }
-
-    void Update()
-    {
-        
-    }
+    [SerializeField] private Vector3 spawnPos;
 
     public string GetAnimalName() { return animalName; }
+
+    public void SetAnimalName(string name) { animalName = name; }
 
     public int GetFedLevel() { return fedLevel; }
 
