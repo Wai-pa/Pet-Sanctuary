@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class AnimalPatrollingBehaviour : MonoBehaviour
 {
-    [SerializeField] private Rigidbody2D rb;
-    [SerializeField] private float movementSpeed = 8f;
+    private LevelManager levelManager;
+    [SerializeField] private float movementSpeed = 3f;
     [SerializeField] private float waitTime = 2f;
+    private float tempTime;
     [SerializeField] private List<Transform> listOfAnimalPatrolPoints = new List<Transform>();
+    [SerializeField] private int rnd = 1;
 
     [Header("Route 0")]
     [SerializeField] private Transform point01;
@@ -40,12 +42,10 @@ public class AnimalPatrollingBehaviour : MonoBehaviour
     [SerializeField] private Transform point52;
     [SerializeField] private Transform point53;
 
-    private LevelManager levelManager;
-
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
         levelManager = LevelManager.instance;
+        tempTime = waitTime;
 
         switch (levelManager.GetAnimalSpawnPointInt())
         {
@@ -81,16 +81,20 @@ public class AnimalPatrollingBehaviour : MonoBehaviour
                 listOfAnimalPatrolPoints.Add(point53);
                 break;
         }
-
-        StartCoroutine(Patrol());
     }
 
-    IEnumerator Patrol()
+    void FixedUpdate()
     {
-        yield return new WaitForSeconds(waitTime);
+        transform.position = Vector2.MoveTowards(transform.position, listOfAnimalPatrolPoints[rnd].position, movementSpeed * Time.fixedDeltaTime);
 
-        transform.LookAt(listOfAnimalPatrolPoints[1]);
-        var position = Vector2.MoveTowards(transform.position, listOfAnimalPatrolPoints[1].position, movementSpeed * Time.deltaTime);
-        rb.MovePosition(position);
+        if (Vector3.Distance(transform.position, listOfAnimalPatrolPoints[rnd].position) <= 0.015f)
+        {
+            if (tempTime <= 0)
+            {
+                rnd = Random.Range(0, listOfAnimalPatrolPoints.Count);
+                tempTime = waitTime;
+            }
+            else { tempTime -= Time.deltaTime; }
+        }
     }
 }
