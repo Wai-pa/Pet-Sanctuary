@@ -14,9 +14,124 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SimpleSelectedItems:
     m_Keys:
-    - Assets/Scripts/Gameplay/AnimalPatrollingBehaviour.cs
+    - Assets/Scenes/Main Scene.unity
+    - Assets/Scripts/Controllers/AnimalController.cs
+    - Assets/Scripts/Managers/UIManager.cs
+    - Assets/Sounds/Background Music/VPJ - Lullaby Ending - Loop.wav
+    - Assets/Sounds/Background Music/VPJ - Lullaby Ending - Loop.wav.meta
+    - Assets/Sounds/Background Music/VPJ - Main - Loop.wav
+    - Assets/Sounds/Background Music/VPJ - Main - Loop.wav.meta
+    - Assets/Sounds/Sound Effects/Creature Eating.wav
+    - Assets/Sounds/Sound Effects/Creature Eating.wav.meta
+    - Assets/Sounds/Sound Effects/animal-squeak-1.wav
+    - Assets/Sounds/Sound Effects/animal-squeak-1.wav.meta
+    - Assets/Sounds/Sound Effects/animal-squeak-2.wav
+    - Assets/Sounds/Sound Effects/animal-squeak-2.wav.meta
+    - Assets/Sounds/Sound Effects/animal-squeak-3.wav
+    - Assets/Sounds/Sound Effects/animal-squeak-3.wav.meta
+    - Assets/Sounds/Sound Effects/footsteps-grass-loop.wav
+    - Assets/Sounds/Sound Effects/footsteps-grass-loop.wav.meta
+    - Assets/Sounds/Sound Effects/footsteps-indoors-loop.wav
+    - Assets/Sounds/Sound Effects/footsteps-indoors-loop.wav.meta
+    - Assets/Sounds/Sound Effects/giggle-1.wav
+    - Assets/Sounds/Sound Effects/giggle-1.wav.meta
+    - Assets/Sounds/Sound Effects/scrubbing.wav
+    - Assets/Sounds/Sound Effects/scrubbing.wav.meta
+    - Assets/Sounds/Sound Effects/select-1.wav
+    - Assets/Sounds/Sound Effects/select-1.wav.meta
+    - Assets/Sprites/Animals/Animal 1.meta
+    - Assets/Sprites/Animals/Animal 1/bicho_1_costas_1.png
+    - Assets/Sprites/Animals/Animal 1/bicho_1_costas_1.png.meta
+    - Assets/Sprites/Animals/Animal 1/bicho_1_costas_2.png
+    - Assets/Sprites/Animals/Animal 1/bicho_1_costas_2.png.meta
+    - Assets/Sprites/Animals/Animal 1/bicho_1_frente_1.png
+    - Assets/Sprites/Animals/Animal 1/bicho_1_frente_1.png.meta
+    - Assets/Sprites/Animals/Animal 1/bicho_1_frente_2.png
+    - Assets/Sprites/Animals/Animal 1/bicho_1_frente_2.png.meta
+    - Assets/Sprites/Animals/Animal 1/bicho_1_left_1.png
+    - Assets/Sprites/Animals/Animal 1/bicho_1_left_1.png.meta
+    - Assets/Sprites/Animals/Animal 1/bicho_1_left_2.png
+    - Assets/Sprites/Animals/Animal 1/bicho_1_left_2.png.meta
+    - Assets/Sprites/Animals/Animal 1/bicho_1_right_1.png
+    - Assets/Sprites/Animals/Animal 1/bicho_1_right_1.png.meta
+    - Assets/Sprites/Animals/Animal 1/bicho_1_right_2.png
+    - Assets/Sprites/Animals/Animal 1/bicho_1_right_2.png.meta
+    - Assets/Sprites/Animals/Animal 2.meta
+    - Assets/Sprites/Animals/Animal 2/bicho_2_costas_1.png
+    - Assets/Sprites/Animals/Animal 2/bicho_2_costas_1.png.meta
+    - Assets/Sprites/Animals/Animal 2/bicho_2_costas_2.png
+    - Assets/Sprites/Animals/Animal 2/bicho_2_costas_2.png.meta
+    - Assets/Sprites/Animals/Animal 2/bicho_2_costas_3.png
+    - Assets/Sprites/Animals/Animal 2/bicho_2_costas_3.png.meta
+    - Assets/Sprites/Animals/Animal 2/bicho_2_direita_1.png
+    - Assets/Sprites/Animals/Animal 2/bicho_2_direita_1.png.meta
+    - Assets/Sprites/Animals/Animal 2/bicho_2_direita_2.png
+    - Assets/Sprites/Animals/Animal 2/bicho_2_direita_2.png.meta
+    - Assets/Sprites/Animals/Animal 2/bicho_2_direita_3.png
+    - Assets/Sprites/Animals/Animal 2/bicho_2_direita_3.png.meta
+    - Assets/Sprites/Animals/Animal 2/bicho_2_esquerda_1.png
+    - Assets/Sprites/Animals/Animal 2/bicho_2_esquerda_1.png.meta
+    - Assets/Sprites/Animals/Animal 2/bicho_2_esquerda_2.png
+    - Assets/Sprites/Animals/Animal 2/bicho_2_esquerda_2.png.meta
+    - Assets/Sprites/Animals/Animal 2/bicho_2_esquerda_3.png
+    - Assets/Sprites/Animals/Animal 2/bicho_2_esquerda_3.png.meta
+    - Assets/Sprites/Animals/Animal 2/bicho_2_frente_1.png
+    - Assets/Sprites/Animals/Animal 2/bicho_2_frente_1.png.meta
+    - Assets/Sprites/Animals/Animal 2/bicho_2_frente_2.png
+    - Assets/Sprites/Animals/Animal 2/bicho_2_frente_2.png.meta
+    - Assets/Sprites/Animals/Animal 2/bicho_2_frente_3.png
+    - Assets/Sprites/Animals/Animal 2/bicho_2_frente_3.png.meta
+    - Assets/Sprites/Animals/Animal 3.meta
+    - Assets/Sprites/Animals/Animal 3/bicho_3_costas_1.png
+    - Assets/Sprites/Animals/Animal 3/bicho_3_costas_1.png.meta
+    - Assets/Sprites/Animals/Animal 3/bicho_3_costas_2.png
+    - Assets/Sprites/Animals/Animal 3/bicho_3_costas_2.png.meta
+    - Assets/Sprites/Animals/Animal 3/bicho_3_costas_3.png
+    - Assets/Sprites/Animals/Animal 3/bicho_3_costas_3.png.meta
+    - Assets/Sprites/Animals/Animal 3/bicho_3_direita_1.png
+    - Assets/Sprites/Animals/Animal 3/bicho_3_direita_1.png.meta
+    - Assets/Sprites/Animals/Animal 3/bicho_3_direita_2.png
+    - Assets/Sprites/Animals/Animal 3/bicho_3_direita_2.png.meta
+    - Assets/Sprites/Animals/Animal 3/bicho_3_direita_3.png
+    - Assets/Sprites/Animals/Animal 3/bicho_3_direita_3.png.meta
+    - Assets/Sprites/Animals/Animal 3/bicho_3_esquerda_1.png
+    - Assets/Sprites/Animals/Animal 3/bicho_3_esquerda_1.png.meta
+    - Assets/Sprites/Animals/Animal 3/bicho_3_esquerda_2.png
+    - Assets/Sprites/Animals/Animal 3/bicho_3_esquerda_2.png.meta
+    - Assets/Sprites/Animals/Animal 3/bicho_3_esquerda_3.png
+    - Assets/Sprites/Animals/Animal 3/bicho_3_esquerda_3.png.meta
+    - Assets/Sprites/Animals/Animal 3/bicho_3_frente_1.png
+    - Assets/Sprites/Animals/Animal 3/bicho_3_frente_1.png.meta
+    - Assets/Sprites/Animals/Animal 3/bicho_3_frente_2.png
+    - Assets/Sprites/Animals/Animal 3/bicho_3_frente_2.png.meta
+    - Assets/Sprites/Animals/Animal 3/bicho_3_frente_3.png
+    - Assets/Sprites/Animals/Animal 3/bicho_3_frente_3.png.meta
+    - Assets/Sprites/Player/boneco_costas_1.png
+    - Assets/Sprites/Player/boneco_costas_1.png.meta
+    - Assets/Sprites/Player/boneco_costas_2.png
+    - Assets/Sprites/Player/boneco_costas_2.png.meta
+    - Assets/Sprites/Player/boneco_costas_3.png
+    - Assets/Sprites/Player/boneco_costas_3.png.meta
+    - Assets/Sprites/Player/boneco_frente_1.png
+    - Assets/Sprites/Player/boneco_frente_1.png.meta
+    - Assets/Sprites/Player/boneco_frente_2.png
+    - Assets/Sprites/Player/boneco_frente_2.png.meta
+    - Assets/Sprites/Player/boneco_frente_3.png
+    - Assets/Sprites/Player/boneco_frente_3.png.meta
+    - Assets/Sprites/Player/boneco_left_1.png
+    - Assets/Sprites/Player/boneco_left_1.png.meta
+    - Assets/Sprites/Player/boneco_left_2.png
+    - Assets/Sprites/Player/boneco_left_2.png.meta
+    - Assets/Sprites/Player/boneco_left_3.png
+    - Assets/Sprites/Player/boneco_left_3.png.meta
+    - Assets/Sprites/Player/boneco_right_1.png
+    - Assets/Sprites/Player/boneco_right_1.png.meta
+    - Assets/Sprites/Player/boneco_right_2.png
+    - Assets/Sprites/Player/boneco_right_2.png.meta
+    - Assets/Sprites/Player/boneco_right_3.png
+    - Assets/Sprites/Player/boneco_right_3.png.meta
     - 
-    m_Values: 0000
+    m_Values: 010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101
   RevisionSummary: 
   ChangesSearchValue: 
   SelectedHistoryRevision: 

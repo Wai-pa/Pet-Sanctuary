@@ -39,6 +39,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Text foodAnimalStatsTxt;
     [SerializeField] private Text soapAnimalStatsTxt;
     [SerializeField] private Text toyAnimalStatsTxt;
+    [SerializeField] private Slider satisfactionSlider;
+    public bool isAnimalStatsPanelOpen;
+    [SerializeField] private Text fedAnimalStatsTxt;
+    [SerializeField] private Text cleanessAnimalStatsTxt;
+    [SerializeField] private Text pleasureAnimalStatsTxt;
 
     [Header("Resource Trader Panel")]
     [SerializeField] private GameObject resourceTraderPanel;
@@ -106,12 +111,14 @@ public class UIManager : MonoBehaviour
 
     public void OnNewGame()
     {
+        isPaused = false;
         TogglePanels(gameplayUIPanel, mainMenuPanel);
         Time.timeScale = 1f;
     }
 
     public void OnLoadGame()
     {
+        isPaused = false;
         TogglePanels(gameplayUIPanel, mainMenuPanel);
         Time.timeScale = 1f;
     }
@@ -184,6 +191,7 @@ public class UIManager : MonoBehaviour
 
         else
         {
+            isAnimalStatsPanelOpen = true;
             TogglePanels(animalStatsPanel, gameplayUIPanel);
             Time.timeScale = 0f;
 
@@ -193,29 +201,61 @@ public class UIManager : MonoBehaviour
             foodAnimalStatsTxt.text = levelManager.food.ToString();
             soapAnimalStatsTxt.text = levelManager.soaps.ToString();
             toyAnimalStatsTxt.text = levelManager.toys.ToString();
+            SetMaxSatisfaction(10);
+            SetSatisfaction(animalSelectedController.GetOverallLevel());
         }
     }
 
     public void OnAnimalFeed()
     {
+        if(levelManager.food < 1 || animalSelectedController.GetFedLevel() > 10) { return; }
+
         levelManager.UpdateFood(false);
         animalSelectedController.SetFedLevel(true);
+        foodAnimalStatsTxt.text = levelManager.food.ToString();
+        SetSatisfaction(animalSelectedController.GetOverallLevel());
     }
 
     public void OnAnimalClean()
     {
+        if (levelManager.soaps < 1 || animalSelectedController.GetCleanessLevel() > 10) { return; }
+
         levelManager.UpdateSoaps(false);
         animalSelectedController.SetCleanessLevel(true);
+        soapAnimalStatsTxt.text = levelManager.soaps.ToString();
+        SetSatisfaction(animalSelectedController.GetOverallLevel());
     }
 
     public void OnAnimalPlay()
     {
+        if (levelManager.toys < 1 || animalSelectedController.GetPleasureLevel() > 10) { return; }
+
         levelManager.UpdateToys(false);
         animalSelectedController.SetPleasureLevel(true);
+        toyAnimalStatsTxt.text = levelManager.toys.ToString();
+        SetSatisfaction(animalSelectedController.GetOverallLevel());
+    }
+
+    public void SetMaxSatisfaction(int satisfaction)
+    {
+        satisfactionSlider.maxValue = satisfaction;
+    }
+
+    public void SetSatisfaction(int satisfaction)
+    {
+        satisfactionSlider.value = satisfaction;
+    }
+
+    public void SetAnimalStatus()
+    {
+        fedAnimalStatsTxt.text = animalSelectedController.GetFedLevel().ToString() + "/10";
+        cleanessAnimalStatsTxt.text = animalSelectedController.GetCleanessLevel().ToString() + "/10";
+        pleasureAnimalStatsTxt.text = animalSelectedController.GetPleasureLevel().ToString() + "/10";
     }
 
     public void OnAnimalStatsResume()
     {
+        isAnimalStatsPanelOpen = false;
         TogglePanels(gameplayUIPanel, animalStatsPanel);
         Time.timeScale = 1f;
     }
