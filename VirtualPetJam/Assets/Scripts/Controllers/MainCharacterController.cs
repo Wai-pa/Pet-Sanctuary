@@ -7,24 +7,32 @@ using UnityEngine.InputSystem;
 public class MainCharacterController : MonoBehaviour
 {
     [Header("Input")]
-    [SerializeField] private Rigidbody2D rb;
-    [SerializeField] private float movementSpeed = 8f;
+    [SerializeField] private float movementSpeed;
+    private Rigidbody2D rb;
     private Vector2 inputVector;
     private Vector2 moveVector;
     [SerializeField] private bool isPaused = false;
     [SerializeField] private bool isInteracted;
 
     [Header("Instances")]
-    private GameManager gameManager;
     private LevelManager levelManager;
     private SoundManager soundManager;
     private UIManager uiManager;
+    private Animator animator;
 
     [Header("Fast Travel")]
     private Vector3 spawnOutsideFrontDoor;
     private Vector3 spawnOutsideBackDoor;
     private Vector3 spawnBuildingFrontDoor;
     private Vector3 spawnBuildingBackDoor;
+
+    [Header("Audio Clips")]
+    [SerializeField] private AudioClip openPanelClip;
+    [SerializeField] private AudioClip openDoorClip;
+    [SerializeField] private AudioClip collectWoodClip;
+    [SerializeField] private AudioClip grassFootstepClip;
+    [SerializeField] private AudioClip indoorFootstepClip;
+    private AudioSource audioSource;
 
     public void OnMove(InputAction.CallbackContext context) // AD (Keyboard), Left Stick (Gamepad)
     {
@@ -54,11 +62,12 @@ public class MainCharacterController : MonoBehaviour
 
     void Initialize()
     {
-        gameManager = GameManager.instance;
         levelManager = LevelManager.instance;
         soundManager = SoundManager.instance;
         rb = GetComponent<Rigidbody2D>();
         uiManager = UIManager.instance;
+        animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
 
         spawnOutsideFrontDoor = new Vector3(4, -1, 0);
         spawnOutsideBackDoor = new Vector3(4, 5, 0);
@@ -71,12 +80,17 @@ public class MainCharacterController : MonoBehaviour
         moveVector.x = inputVector.x;
         moveVector.y = inputVector.y;
         rb.MovePosition(rb.position + moveVector * movementSpeed * Time.fixedDeltaTime);
+
+        animator.SetFloat("Horizontal", moveVector.x);
+        animator.SetFloat("Vertical", moveVector.y);
+        animator.SetFloat("Speed", moveVector.sqrMagnitude);
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Wood")
         {
+            soundManager.PlaySound(collectWoodClip);
             levelManager.RestoreSpawnedWoodPosition(collision.gameObject.transform.position);
             levelManager.UpdateWood(true);
             Destroy(collision.gameObject);
@@ -87,7 +101,11 @@ public class MainCharacterController : MonoBehaviour
     {
         if (isInteracted)
         {
-            if (collision.gameObject.tag == "Animal") { uiManager.OpenAnimalStatsPanel(collision.gameObject); }
+            if (collision.gameObject.tag == "Animal") 
+            {
+                soundManager.PlaySound(openPanelClip);
+                uiManager.OpenAnimalStatsPanel(collision.gameObject); 
+            }
             else if(collision.gameObject.name == "OutsideFrontDoor") 
             {
                 levelManager.IsPlayerInTheFrontyard(false);
@@ -108,17 +126,34 @@ public class MainCharacterController : MonoBehaviour
                 levelManager.IsPlayerInTheBackyard(true);
                 StartCoroutine(FastTravel(spawnOutsideBackDoor)); 
             }
-            else if (collision.gameObject.name == "AnimalCreator") { uiManager.OpenCreateAnimalPanel(); }
+            else if (collision.gameObject.name == "AnimalCreator") 
+            {
+                soundManager.PlaySound(openPanelClip);
+                uiManager.OpenCreateAnimalPanel(); 
+            }
 
-            else if (collision.gameObject.name == "ResourceTrader") { uiManager.OpenResourceTraderPanel(); }
+            else if (collision.gameObject.name == "ResourceTrader")
+            {
+                soundManager.PlaySound(openPanelClip);
+                uiManager.OpenResourceTraderPanel(); 
+            }
         }
     }
 
     IEnumerator FastTravel(Vector3 target)
     {
+        Time.timeScale = 0f;
+        soundManager.PlaySound(openDoorClip);
         uiManager.FastTravelBlackPanel(true);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSecondsRealtime(0.5f);
+        Time.timeScale = 1f;
         transform.position = target;
         uiManager.FastTravelBlackPanel(false);
+    }
+
+    public void PlayFootstep()
+    {
+        if(!levelManager.isPlayerInTheBackyard && !levelManager.isPlayerInTheFrontyard) { audioSource.PlayOneShot(indoorFootstepClip); }
+        else { audioSource.PlayOneShot(grassFootstepClip); }
     }
 }

@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class AnimalPatrollingBehaviour : MonoBehaviour
 {
+    [Header("Instances")]
     private LevelManager levelManager;
+    private Animator animator;
+    private AudioSource audioSource;
+
+    [Header("Miscellaneous")]
     [SerializeField] private float movementSpeed = 3f;
     [SerializeField] private float waitTime = 2f;
     private float tempTime;
     [SerializeField] private List<Transform> listOfAnimalPatrolPoints = new List<Transform>();
-    [SerializeField] private int rnd = 1;
+    private int rnd = 1;
+    [SerializeField] private AudioClip grassFootstepClip;
 
     [Header("Route 0")]
     [SerializeField] private Transform point01;
@@ -46,6 +52,8 @@ public class AnimalPatrollingBehaviour : MonoBehaviour
     {
         levelManager = LevelManager.instance;
         tempTime = waitTime;
+        animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
 
         switch (levelManager.GetAnimalSpawnPointInt())
         {
@@ -87,7 +95,15 @@ public class AnimalPatrollingBehaviour : MonoBehaviour
     {
         transform.position = Vector2.MoveTowards(transform.position, listOfAnimalPatrolPoints[rnd].position, movementSpeed * Time.fixedDeltaTime);
 
-        if (Vector3.Distance(transform.position, listOfAnimalPatrolPoints[rnd].position) <= 0.015f)
+        float tempX = listOfAnimalPatrolPoints[rnd].position.x - transform.position.x;
+        float tempY = listOfAnimalPatrolPoints[rnd].position.y - transform.position.y;
+        Vector2 vTemp = new Vector2(tempX, tempY);
+
+        animator.SetFloat("Horizontal", tempX);
+        animator.SetFloat("Vertical", tempY);
+        animator.SetFloat("Speed", vTemp.sqrMagnitude);
+
+        if (Vector3.Distance(transform.position, listOfAnimalPatrolPoints[rnd].position) <= 0.01f)
         {
             if (tempTime <= 0)
             {
@@ -97,4 +113,6 @@ public class AnimalPatrollingBehaviour : MonoBehaviour
             else { tempTime -= Time.deltaTime; }
         }
     }
+
+    public void PlayFootsteps() { audioSource.PlayOneShot(grassFootstepClip); }
 }

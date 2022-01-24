@@ -2,17 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using System.Linq;
 
 public class LevelManager : MonoBehaviour
 {
     [Header("Instances")]
     public static LevelManager instance = null;
     [SerializeField] private CinemachineConfiner confiner;
-    private GameManager gameManager;
     private SoundManager soundManager;
 
     [Header("Player Stats")]
-    public string playerName;
     public int food;
     public int soaps;
     public int toys;
@@ -47,8 +46,8 @@ public class LevelManager : MonoBehaviour
         public int cleanessLevel;
         public int pleasureLevel;
         public int overallLevel;
-        public int spawnPosX;
-        public int spawnPosY;
+        public float spawnPosX;
+        public float spawnPosY;
     }
 
     void Awake()
@@ -59,7 +58,6 @@ public class LevelManager : MonoBehaviour
 
     void Start()
     {
-        gameManager = GameManager.instance;
         soundManager = SoundManager.instance;
         InitializeAnimalSpawnPoints();
         InitializeWoodSpawnPositions();
@@ -69,7 +67,9 @@ public class LevelManager : MonoBehaviour
 
     void Update()
     {
-        if (isPlayerInTheFrontyard)
+        UpdateRate();
+
+        if (isPlayerInTheFrontyard && listOfTransformToSpawnWood.Count > 0)
         {
             if (spawnWoodTime <= 0)
             {
@@ -98,7 +98,6 @@ public class LevelManager : MonoBehaviour
 
     public void CreateAnimal(string animalName, int animalSelected)
     {
-        animalSpawnPointInt = Random.Range(0, listOfAnimalSpawnPoints.Count);
         Instantiate(listOfAnimalsPrefabs[animalSelected], listOfAnimalSpawnPoints[animalSpawnPointInt], Quaternion.identity);
         GameObject animalObj = GameObject.Find("Animal" + (animalSelected + 1) + "(Clone)");
         animalObj.name = animalName;
@@ -106,7 +105,9 @@ public class LevelManager : MonoBehaviour
         animalSelectedController = animalObj.GetComponent<AnimalController>();
         animalSelectedController.SetAnimalID(animalSelected + 1);
         animalSelectedController.SetAnimalName(animalName);
-        
+        animalSelectedController.SetSpawnX(listOfAnimalSpawnPoints[animalSpawnPointInt].x);
+        animalSelectedController.SetSpawnY(listOfAnimalSpawnPoints[animalSpawnPointInt].y);
+
         Animals animal = new Animals();
 
         animal.animalID = animalSelectedController.GetAnimalID();
@@ -115,9 +116,11 @@ public class LevelManager : MonoBehaviour
         animal.cleanessLevel = animalSelectedController.GetCleanessLevel();
         animal.pleasureLevel = animalSelectedController.GetPleasureLevel();
         animal.overallLevel = animalSelectedController.GetOverallLevel();
+        animal.spawnPosX = animalSelectedController.GetSpawnX();
+        animal.spawnPosY = animalSelectedController.GetSpawnY();
 
+        animalSpawnPointInt--;
         listOfAnimals.Add(animal);
-        listOfAnimalSpawnPoints.Remove(listOfAnimalSpawnPoints[animalSpawnPointInt]);
     }
 
     public void UpdateFood(bool increase) { food = increase ? food += 1 : food -= 1; }
@@ -138,6 +141,8 @@ public class LevelManager : MonoBehaviour
         {
             rate += listOfAnimals[i].overallLevel;
         }
+
+        if(rate != 0) { rate /= listOfAnimals.Count; }
     }
 
     void InitializeWoodSpawnPositions()
@@ -179,9 +184,49 @@ public class LevelManager : MonoBehaviour
         listOfAnimalSpawnPoints.Add(new Vector3(-1f, 8.7f, 0));
         listOfAnimalSpawnPoints.Add(new Vector3(6f, 5.5f, 0));
         listOfAnimalSpawnPoints.Add(new Vector3(12f, 12.8f, 0));
+
+        animalSpawnPointInt = listOfAnimalSpawnPoints.Count - 1;
     }
 
-    public int GetAnimalSpawnPointInt() { return animalSpawnPointInt; }
+    public int GetAnimalSpawnPointInt() { return animalSpawnPointInt + 1; }
 
-    public int GetSizeOfAnimalSpawnPointList() { return listOfAnimalSpawnPoints.Count; }
+    public int GetNumberOfAnimals() { return listOfAnimals.Count; }
+
+    public void AnimalDatabaseUpdate(AnimalController animalController)
+    {
+        Animals animal = new Animals();
+        int animalToDestroy = 0;
+
+        for (int i = 0; i < listOfAnimals.Count; i++)
+        {
+            if(listOfAnimals[i].animalName == animalController.GetAnimalName())
+            {
+                animalToDestroy = i;
+
+                animal.animalID = animalController.GetAnimalID();
+                animal.animalName = animalController.GetAnimalName();
+                animal.fedLevel = animalController.GetFedLevel();
+                animal.cleanessLevel = animalController.GetCleanessLevel();
+                animal.pleasureLevel = animalController.GetPleasureLevel();
+                animal.overallLevel = animalController.GetOverallLevel();
+                animal.spawnPosX = animalController.GetSpawnX();
+                animal.spawnPosY = animalController.GetSpawnY();
+            }
+        }
+
+        listOfAnimals.RemoveAt(animalToDestroy);
+        listOfAnimals.Add(animal);
+    }
+
+    public bool AnimalNameAlreadyExists(string name)
+    {
+        bool animalNameAlreadyExists = false;
+
+        for (int i = 0; i < listOfAnimals.Count; i++)
+        {
+            if(listOfAnimals[i].animalName == name) { animalNameAlreadyExists = true; }
+        }
+
+        return animalNameAlreadyExists;
+    }
 }

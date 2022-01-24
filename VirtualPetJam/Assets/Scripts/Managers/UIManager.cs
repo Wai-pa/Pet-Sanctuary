@@ -5,8 +5,9 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    [HideInInspector] public static UIManager instance = null;
+    public static UIManager instance = null;
     private LevelManager levelManager;
+    private SoundManager soundManager;
 
     [Header("Ingame Gameplay UI Panel")]
     [SerializeField] private GameObject gameplayUIPanel;
@@ -20,6 +21,9 @@ public class UIManager : MonoBehaviour
     [Header("Main Menu Panel")]
     [SerializeField] private GameObject mainMenuPanel;
 
+    [Header("Instructions Panel")]
+    [SerializeField] private GameObject instructionsPanel;
+
     [Header("Credits Panel")]
     [SerializeField] private GameObject creditsPanel;
 
@@ -31,6 +35,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private int animalSelected;
     [SerializeField] private Dropdown animalDropdown;
     [SerializeField] private InputField animalInputField;
+    [SerializeField] private GameObject messageBox;
+    [SerializeField] private Text messageBoxTxt;
 
     [Header("Animal Stats Panel")]
     [SerializeField] private GameObject animalStatsPanel;
@@ -40,6 +46,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Text soapAnimalStatsTxt;
     [SerializeField] private Text toyAnimalStatsTxt;
     [SerializeField] private Slider satisfactionSlider;
+    [SerializeField] private Gradient satisfactionGradient;
+    [SerializeField] private Image sliderFillImage;
     public bool isAnimalStatsPanelOpen;
     [SerializeField] private Text fedAnimalStatsTxt;
     [SerializeField] private Text cleanessAnimalStatsTxt;
@@ -56,6 +64,7 @@ public class UIManager : MonoBehaviour
     [Header("Pause Menu Panel")]
     [SerializeField] private GameObject pauseMenuPanel;
     private bool isPaused = false;
+    [SerializeField] private Slider volumeSlider;
 
     [Header("Fast Travel Black Panel")]
     [SerializeField] private GameObject fastTravelBlackPanel;
@@ -63,6 +72,11 @@ public class UIManager : MonoBehaviour
     [Header("Resources")]
     [SerializeField] private List<Sprite> listOfAnimalsImages = new List<Sprite>();
     [SerializeField] private AnimalController animalSelectedController = null;
+
+    [Header("Audio Clips")]
+    [SerializeField] private AudioClip animalEatClip;
+    [SerializeField] private AudioClip animalCleanClip;
+    [SerializeField] private AudioClip animalPlayClip;
 
     void Awake()
     {
@@ -72,8 +86,11 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
-        Time.timeScale = 0f;
         levelManager = LevelManager.instance;
+        soundManager = SoundManager.instance;
+        Time.timeScale = 0f;
+        volumeSlider.value = 0.5f;
+        soundManager.ChangeMasterVolume(volumeSlider.value);
         mainMenuPanel.SetActive(true);
     }
 
@@ -102,22 +119,18 @@ public class UIManager : MonoBehaviour
 
     void WoodTextUpdate() { woodText.text = levelManager.wood.ToString(); }
 
-    void RateTextUpdate() { rateText.text = levelManager.rate.ToString(); }
+    void RateTextUpdate() { rateText.text = levelManager.rate.ToString() + "/10"; }
 
     // ================= [END] Ingame Gameplay UI Panel =======================
 
 
     // ================= [BEGIN] Main Menu Panel ======================
 
-    public void OnNewGame()
-    {
-        isPaused = false;
-        TogglePanels(gameplayUIPanel, mainMenuPanel);
-        Time.timeScale = 1f;
-    }
+    public void OnNewGame() { TogglePanels(instructionsPanel, mainMenuPanel); }
 
     public void OnLoadGame()
     {
+        //levelManager.OnLoadLevel();
         isPaused = false;
         TogglePanels(gameplayUIPanel, mainMenuPanel);
         Time.timeScale = 1f;
@@ -137,6 +150,20 @@ public class UIManager : MonoBehaviour
     // ================= [END] Main Menu Panel =======================
 
 
+    // ================= [BEGIN] Instructions Panel ======================
+
+    public void OnContinue() 
+    {
+        isPaused = false;
+        TogglePanels(gameplayUIPanel, instructionsPanel);
+        Time.timeScale = 1f;
+    }
+
+    public void OnInstructionsPanelBack() { TogglePanels(mainMenuPanel, instructionsPanel); }
+
+    // ================= [END] Instructions Panel =======================
+
+
     // ================= [BEGIN] Credits Panel ======================
 
     public void OnCreditsBackBtn() { TogglePanels(mainMenuPanel, creditsPanel); }
@@ -148,18 +175,54 @@ public class UIManager : MonoBehaviour
     public void OpenCreateAnimalPanel()
     {
         TogglePanels(createAnimalPanel, gameplayUIPanel);
+        animalInputField.text = "";
+        animalDropdown.value = 0;
         Time.timeScale = 0f;
+        if (levelManager.GetNumberOfAnimals() > 5)
+        {
+            messageBox.SetActive(true);
+            messageBoxTxt.text = "There is no more room for animals!";
+        }
+        else { messageBox.SetActive(false); }
     }
 
     public void OnCreateBtn()
     {
-        if(nameInput == "") { return; }
+        if (levelManager.money < 10)
+        {
+            messageBox.SetActive(true);
+            messageBoxTxt.text = "It costs 10 coins to create an animal!";
+            return;
+        }
 
-        if(levelManager.GetSizeOfAnimalSpawnPointList() < 1) { return; }
+        else if (nameInput == "")
+        {
+            messageBox.SetActive(true);
+            messageBoxTxt.text = "Hey, you're forgetting the name...";
+            return; 
+        }
 
-        levelManager.CreateAnimal(nameInput, animalSelected);
-        TogglePanels(gameplayUIPanel, createAnimalPanel);
-        Time.timeScale = 1f;
+        else if (levelManager.AnimalNameAlreadyExists(nameInput)) 
+        {
+            messageBox.SetActive(true);
+            messageBoxTxt.text = "This name already exists!";
+            return; 
+        }
+
+        else if (levelManager.GetNumberOfAnimals() > 5) 
+        {
+            messageBox.SetActive(true);
+            messageBoxTxt.text = "There is no more room for animals!";
+            return; 
+        }
+
+        else
+        {
+            levelManager.CreateAnimal(nameInput, animalSelected);
+            levelManager.money -= 10;
+            TogglePanels(gameplayUIPanel, createAnimalPanel);
+            Time.timeScale = 1f;
+        }
     }
 
     public void OnAnimalSelectionDropdown()
@@ -196,7 +259,7 @@ public class UIManager : MonoBehaviour
             Time.timeScale = 0f;
 
             animalSelectedController = gameObj.GetComponent<AnimalController>();
-            animalStatsImg.sprite = listOfAnimalsImages[animalSelectedController.GetAnimalID()];
+            animalStatsImg.sprite = listOfAnimalsImages[animalSelectedController.GetAnimalID() - 1];
             animalNameTxt.text = animalSelectedController.GetAnimalName();
             foodAnimalStatsTxt.text = levelManager.food.ToString();
             soapAnimalStatsTxt.text = levelManager.soaps.ToString();
@@ -208,8 +271,9 @@ public class UIManager : MonoBehaviour
 
     public void OnAnimalFeed()
     {
-        if(levelManager.food < 1 || animalSelectedController.GetFedLevel() > 10) { return; }
+        if(levelManager.food < 1 || animalSelectedController.GetFedLevel() > 9) { return; }
 
+        soundManager.PlaySound(animalEatClip);
         levelManager.UpdateFood(false);
         animalSelectedController.SetFedLevel(true);
         foodAnimalStatsTxt.text = levelManager.food.ToString();
@@ -218,8 +282,9 @@ public class UIManager : MonoBehaviour
 
     public void OnAnimalClean()
     {
-        if (levelManager.soaps < 1 || animalSelectedController.GetCleanessLevel() > 10) { return; }
+        if (levelManager.soaps < 1 || animalSelectedController.GetCleanessLevel() > 9) { return; }
 
+        soundManager.PlaySound(animalCleanClip);
         levelManager.UpdateSoaps(false);
         animalSelectedController.SetCleanessLevel(true);
         soapAnimalStatsTxt.text = levelManager.soaps.ToString();
@@ -228,8 +293,9 @@ public class UIManager : MonoBehaviour
 
     public void OnAnimalPlay()
     {
-        if (levelManager.toys < 1 || animalSelectedController.GetPleasureLevel() > 10) { return; }
+        if (levelManager.toys < 1 || animalSelectedController.GetPleasureLevel() > 9) { return; }
 
+        soundManager.PlaySound(animalPlayClip);
         levelManager.UpdateToys(false);
         animalSelectedController.SetPleasureLevel(true);
         toyAnimalStatsTxt.text = levelManager.toys.ToString();
@@ -239,11 +305,13 @@ public class UIManager : MonoBehaviour
     public void SetMaxSatisfaction(int satisfaction)
     {
         satisfactionSlider.maxValue = satisfaction;
+        sliderFillImage.color = satisfactionGradient.Evaluate(1f);
     }
 
     public void SetSatisfaction(int satisfaction)
     {
         satisfactionSlider.value = satisfaction;
+        sliderFillImage.color = satisfactionGradient.Evaluate(satisfactionSlider.normalizedValue);
     }
 
     public void SetAnimalStatus()
@@ -348,6 +416,11 @@ public class UIManager : MonoBehaviour
         isPaused = false;
     }
 
+    public void OnVolumeChanged()
+    {
+        soundManager.ChangeMasterVolume(volumeSlider.value);
+    }
+
     public void OnMainMenu()
     {
         TogglePanels(mainMenuPanel, pauseMenuPanel);
@@ -372,7 +445,7 @@ public class UIManager : MonoBehaviour
     // ================= [END] Fast Travel Black Panel =======================
 
 
-    // ================= [BEGIN] Resources =======================
+    // ===================== [BEGIN] Resources ===========================
 
     void TogglePanels(GameObject panelToActivate, GameObject panelToDeactivate)
     {
@@ -380,5 +453,5 @@ public class UIManager : MonoBehaviour
         panelToDeactivate.SetActive(false);
     }
 
-    // ================= [END] Resources =======================
+    // ===================== [END] Resources ============================
 }

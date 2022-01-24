@@ -14,7 +14,6 @@ public class LevelData
     public LevelData()
     {
         LevelManager levelManager = LevelManager.instance;
-        playerName = levelManager.playerName;
         food = levelManager.food;
         soaps = levelManager.soaps;
         toys = levelManager.toys;

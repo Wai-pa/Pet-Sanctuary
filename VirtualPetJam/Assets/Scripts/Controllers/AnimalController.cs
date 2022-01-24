@@ -5,6 +5,7 @@ using UnityEngine;
 public class AnimalController : MonoBehaviour
 {
     private UIManager uiManager;
+    private LevelManager levelManager;
 
     [Header("Status")]
     [SerializeField] private int animalID;
@@ -13,28 +14,34 @@ public class AnimalController : MonoBehaviour
     [SerializeField] private int cleanessLevel;
     [SerializeField] private int pleasureLevel;
     [SerializeField] private int overallLevel;
+    [SerializeField] private float spawnX;
+    [SerializeField] private float spawnY;
+
+    [Header("Miscellaneous")]
     [SerializeField] private float timeToDecreaseLevel;
-    [SerializeField] private float tempTime = 20f;
+    [SerializeField] private float tempTime;
 
     void Start()
     {
         uiManager = UIManager.instance;
+        levelManager = LevelManager.instance;
 
         fedLevel = 8;
         cleanessLevel = 8;
         pleasureLevel = 8;
-        timeToDecreaseLevel = 40f;
+        tempTime = 40f;
+        timeToDecreaseLevel = 60f;
     }
 
     void Update()
     {
+        levelManager.AnimalDatabaseUpdate(this);
+
         if (!uiManager.GameIsPaused())
         {
-            overallLevel = GetOverallLevel();
-
             if (uiManager.isAnimalStatsPanelOpen) 
             {
-                uiManager.SetSatisfaction(overallLevel);
+                uiManager.SetSatisfaction(GetOverallLevel());
                 uiManager.SetAnimalStatus();
             }
 
@@ -105,6 +112,14 @@ public class AnimalController : MonoBehaviour
     public int GetAnimalID() { return animalID; }
 
     public void SetAnimalID(int animalID) { this.animalID = animalID; }
+
+    public void SetSpawnX(float spawnX) { this.spawnX = spawnX; }
+
+    public float GetSpawnX() { return spawnX; }
+
+    public float GetSpawnY() { return spawnY; }
+
+    public void SetSpawnY(float spawnY) { this.spawnY = spawnY; }
 
     public int GetOverallLevel() 
     {
