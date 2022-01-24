@@ -128,14 +128,6 @@ public class UIManager : MonoBehaviour
 
     public void OnNewGame() { TogglePanels(instructionsPanel, mainMenuPanel); }
 
-    public void OnLoadGame()
-    {
-        //levelManager.OnLoadLevel();
-        isPaused = false;
-        TogglePanels(gameplayUIPanel, mainMenuPanel);
-        Time.timeScale = 1f;
-    }
-
     public void OpenCreditsPanel() { TogglePanels(creditsPanel, mainMenuPanel); }
 
     public void OnQuit()

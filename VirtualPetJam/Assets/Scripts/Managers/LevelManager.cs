@@ -86,15 +86,14 @@ public class LevelManager : MonoBehaviour
         else { confiner.m_BoundingShape2D = outsideCollider; }
     }
 
-    public void OnSaveLevel() //UI button to save game
+    public void NewGame()
     {
-        SaveSystem.SaveLevel();
+
     }
 
-    public void OnLoadLevel() //UI button to load game
-    {
-        SaveSystem.LoadLevel();
-    }
+    public void OnSaveLevel() { SaveSystem.SaveLevel(); }
+
+    public void OnLoadLevel() { SaveSystem.LoadLevel(); }
 
     public void CreateAnimal(string animalName, int animalSelected)
     {
