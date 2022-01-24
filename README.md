@@ -17,6 +17,6 @@ https://www.linkedin.com/in/eduardo-medeiros-nunes/
 
 Marília Dornellas: Artist
 
-Nick Palmer: Music, Sound effects, Game Documentation
+Nick Palmer: Music, Sound effects
 
 https://soundcloud.com/nhpcomposer
